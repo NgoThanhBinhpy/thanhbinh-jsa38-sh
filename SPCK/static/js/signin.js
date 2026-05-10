@@ -1,5 +1,4 @@
-import { checkLoginStatus } from "./checkLoginStatus.js";
-import { showToast, getRegistrationData } from "./utils.js";
+import { showToast, getRegistrationData, checkLoginStatus } from "./utils.js";
 const signinForm = document.getElementById("formSignin");
 const inputName = document.getElementById("inputName");
 const inputPassword = document.getElementById("inputPassword");
