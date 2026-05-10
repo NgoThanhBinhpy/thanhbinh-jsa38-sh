@@ -1,0 +1,96 @@
+<!--1.A;2.B;3.C;4.C;5.B;6.B;7.A;8.B;9.C;10.D-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="score">score: 0</div>
+    <div
+      style="display: grid; grid-template: repeat(4, 150px) / repeat(4, 150px)"
+      id="container"
+    ></div>
+    <script>
+      const container = document.getElementById("container");
+      const score_div = document.getElementById("score");
+      let score = 0;
+      let cards = [
+        "green",
+        "green",
+        "red",
+        "red",
+        "orange",
+        "orange",
+        "black",
+        "black",
+        "blue",
+        "blue",
+        "pink",
+        "pink",
+        "purple",
+        "purple",
+        "yellow",
+        "yellow",
+      ];
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          let j = Math.floor(Math.random() * (i + 1));
+
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+      cards = shuffleArray(cards);
+
+      cards.forEach((card_color) => {
+        const card = document.createElement("div");
+        card.style.backgroundColor = "lightgrey";
+        card.style.border = "1px solid black";
+        card.style.height = "150px";
+        card.style.width = "150px";
+        card.id = card_color;
+        container.appendChild(card);
+      });
+
+      let children = container.children;
+      Array.from(children).forEach((child) => {
+        const controller = new AbortController();
+        const { signal } = controller;
+        child.addEventListener(
+          "click",
+          (e) => {
+            e.preventDefault();
+            child.style.backgroundColor = child.id;
+            console.log(child.id);
+            child.classList.add("selected");
+            let seclected_child = document.getElementsByClassName("selected");
+            if (seclected_child.length == 2) {
+              if (seclected_child[0].id === seclected_child[1].id) {
+                alert("chinh xac");
+                Array.from(seclected_child).forEach((card) => {
+                  card.style.backgroundColor = card.id;
+                  card.style.border = "none";
+                  controller.abort();
+                  card.classList.remove("selected");
+                  children = container.children;
+                });
+                score += 1;
+                score_div.textContent = `score: ${score}`;
+                seclected_child = document.getElementsByClassName("selected");
+              } else {
+                Array.from(seclected_child).forEach((card) => {
+                  card.classList.remove("selected");
+                  card.style.backgroundColor = "lightgrey";
+                });
+                seclected_child = document.getElementsByClassName("selected");
+              }
+            }
+          },
+          { signal },
+        );
+      });
+    </script>
+  </body>
+</html>

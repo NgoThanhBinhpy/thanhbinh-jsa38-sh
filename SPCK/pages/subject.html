@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Môn học</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../static/css/model.css" />
+  </head>
+  <body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Nav-bar start-->
+    <script src="../static/js/navbarCreator.js"></script>
+    <!-- Nav-bar end-->
+
+    <!--Text container starts-->
+    <div class="container mt-4">
+      <h1 class="text-center mb-4">Môn học</h1>
+      <p class="text-center mb-4">
+        Trang Môn học cung cấp danh sách các môn đang giảng dạy cùng mô tả ngắn
+        gọn, giúp học sinh dễ dàng nắm bắt nội dung chính và lựa chọn tài liệu
+        phù hợp cho việc học tập.
+      </p>
+    </div>
+    <!--Text container ends-->
+
+    <!--Subject-content starts-->
+    <div class="container mt-4">
+      <div
+        class="d-flex row g-4 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6"
+        id="content-container"
+      ></div>
+    </div>
+    <!--Subject-content ends-->
+
+    <script src="../static/js/checkLoginStatus.js" type="module"></script>
+    <script src="../static/js/subject.js"></script>
+
+    <!-- <script src="../static/js/subject-responsive.js"></script> -->
+  </body>
+</html>
