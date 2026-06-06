@@ -1,0 +1,189 @@
+:root {
+  --accent-color: #f6c23e;
+  --accent-alt: #d2e9e3;
+  --accent-red: #fc4444;
+  --accent-orange: #f59e0b;
+}
+.navbar {
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+.navbar-brand {
+  color: #111;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.nav-link {
+  color: #555 !important;
+}
+.nav-link:hover,
+.nav-link.active {
+  color: #111 !important;
+  background: #f3f4f6;
+}
+.dropdown-menu {
+  border: 1px solid #e5e7eb;
+  min-width: 340px;
+  padding: 12px;
+}
+.dropdown-item {
+  font-size: 13px;
+  color: #444;
+  border-radius: 6px;
+  padding: 7px 10px;
+}
+.dropdown-item:hover {
+  background: #f3f4f6;
+  color: #111;
+}
+.search-input:focus {
+  box-shadow: none !important;
+  border-color: #a78bfa !important;
+}
+#search_btn:hover {
+  cursor: pointer;
+}
+
+.info {
+  min-height: 100%;
+  padding-top: 4rem;
+}
+a {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.scrollable::-webkit-scrollbar {
+  height: 5px;
+}
+.scrollable::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 2px;
+}
+
+.scrollable {
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+  min-width: 0;
+}
+
+.color-overlay {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 1));
+  width: 100%;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+}
+
+.text {
+  color: white !important;
+  z-index: 3;
+}
+
+.text2 {
+  color: lightgray !important;
+  z-index: 3;
+  text-decoration: underline;
+}
+
+.text3 {
+  color: hsla(0, 0%, 100%, 0.8) !important;
+  z-index: 3;
+}
+
+.exceptional {
+  background: linear-gradient(180deg, #b4ec51, #429321);
+}
+.recommended {
+  background: linear-gradient(180deg, #2196f3, #1976d2);
+}
+.meh {
+  background: linear-gradient(180deg, #ffc107, #ff8f00);
+}
+.skip {
+  background: linear-gradient(180deg, #f44336, #d32f2f);
+}
+.rounded-circle {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.game-placeholder {
+  width: 390px;
+  height: 225px;
+  background: #e9ecef;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #adb5bd;
+}
+
+.game-card {
+  flex: 0 0 auto;
+  width: 350px;
+  max-width: 100%;
+}
+
+.game-card:hover {
+  cursor: pointer;
+}
+
+.game-card img {
+  width: 100%;
+  height: 225px;
+  object-fit: cover;
+}
+
+.game-card .game-name {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 30px 10px 10px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+input:required {
+  border-left: 4px solid var(--accent-orange);
+}
+:is(textarea, select):required {
+  border-left: 4px solid var(--accent-alt);
+}
+input[type="checkbox"] {
+  border-left: 3px solid var(--accent-red);
+}
+
+#scrollspy-nav .nav-link {
+  color: #555;
+  font-size: 0.875rem;
+}
+#scrollspy-nav .nav-link.active {
+  color: #000;
+  font-weight: 600;
+  background: #f0f0f0;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}

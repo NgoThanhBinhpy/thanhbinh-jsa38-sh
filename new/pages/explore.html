@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Explore page</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="../static/css/index.css" />
+  </head>
+  <body>
+    <div class="px-4 py-3 mt-2">
+      <h2 class="text-dark" id="page-title"></h2>
+      <div class="fs-6 w-100 text-dark" id="page-discription"></div>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <span id="results-count" class="text-muted fs-6"></span>
+        <select class="form-select w-auto" id="sort-select">
+          <option value="-added">Most Popular</option>
+          <option value="-metacritic">Top Rated</option>
+          <option value="-released">Newest</option>
+          <option value="name">A-Z</option>
+        </select>
+      </div>
+      <div class="games-grid" id="games-grid"></div>
+      <div class="text-center mt-4">
+        <button class="btn btn-outline-secondary px-5" id="load-more-btn">
+          Load More
+        </button>
+      </div>
+    </div>
+    <script type="module" src="../static/js/utils.js"></script>
+    <script type="module" src="../static/js/explore.js"></script>
+  </body>
+</html>

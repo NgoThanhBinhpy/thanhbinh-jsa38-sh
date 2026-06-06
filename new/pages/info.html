@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="../static/css/index.css" />
+  </head>
+  <body style="overflow-x: hidden; background-color: black" class="p-0">
+    <!-- Toast Success starts-->
+    <div
+      id="toastSuccess"
+      class="toast align-items-center text-bg-success border-0 position-fixed top-0 start-50 translate-middle-x mt-3"
+      style="z-index: 1056"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
+      <div class="d-flex">
+        <div class="toast-body" id="toastSuccessBody"></div>
+        <button
+          type="button"
+          class="btn-close btn-close-white me-2 m-auto"
+          data-bs-dismiss="toast"
+        ></button>
+      </div>
+    </div>
+    <!-- Toast Success ends-->
+
+    <!-- Toast Danger starts-->
+    <div
+      id="toastDanger"
+      class="toast align-items-center text-bg-danger border-0 position-fixed top-0 start-50 translate-middle-x mt-3"
+      style="z-index: 1056"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
+      <div class="d-flex">
+        <div class="toast-body" id="toastDangerBody"></div>
+        <button
+          type="button"
+          class="btn-close btn-close-white me-2 m-auto"
+          data-bs-dismiss="toast"
+        ></button>
+      </div>
+    </div>
+    <!--Toast Danger ends-->
+    <div class="color-overlay"></div>
+    <h1
+      id="name"
+      class="text name mx-auto position-absolute top-0 start-50 translate-middle-x z-3 fw-bold fs-1 w-100 text-center"
+    ></h1>
+    <div class="p-3 info position-absolute top-0 start-0 z-3 w-50">
+      <div class="d-flex justify-content-evenly">
+        <div class="release my-4 p-2 w-50">
+          <p class="text my-0">Release Date</p>
+          <p id="released" class="text2 my-0"></p>
+        </div>
+        <div class="playtime my-4 p-2 w-50">
+          <div class="text my-0 d-flex">
+            <p class="mx-1">Average playtime:</p>
+            <p id="playtime"></p>
+            <p class="mx-1">hours</p>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex gap-2">
+        <div class="w-50 px-4" id="wishlist">
+          <button
+            class="btn btn-outline-light btn-sm mx-auto"
+            id="wishlist-btn"
+          >
+            <i class="fa-regular fa-bookmark me-1"></i> Add to Wishlist
+          </button>
+        </div>
+        <div class="w-50 px-4" id="favourites">
+          <button
+            class="btn btn-outline-light btn-sm mx-auto"
+            id="favourite-btn"
+          >
+            <i class="fa-regular fa-heart me-1"></i> Add to Favourites
+          </button>
+        </div>
+      </div>
+      <div id="ratings">
+        <div class="text my-2 fs-3">Player's ratings</div>
+        <div class="d-flex">
+          <div class="exceptional rounded-start rating-container"></div>
+          <div class="recommended rating-container"></div>
+          <div class="meh rating-container"></div>
+          <div class="skip rounded-end rating-container"></div>
+        </div>
+        <br />
+        <div class="d-flex gap-3">
+          <div
+            class="d-flex rounded-pill border rating-counter gap-2 align-items-center p-1"
+          >
+            <div class="exceptional rounded-circle"></div>
+          </div>
+          <br />
+          <div
+            class="d-flex rounded-pill border rating-counter gap-2 align-items-center p-1"
+          >
+            <div class="recommended rounded-circle"></div>
+          </div>
+          <br />
+          <div
+            class="d-flex rounded-pill border rating-counter gap-2 align-items-center p-1"
+          >
+            <div class="meh rounded-circle"></div>
+          </div>
+          <br />
+          <div
+            class="d-flex rounded-pill border rating-counter gap-2 align-items-center p-1"
+          >
+            <div class="skip rounded-circle"></div>
+          </div>
+        </div>
+      </div>
+      <div class="description my-4 p-4">
+        <p class="text my-0 fs-3">About</p>
+        <p id="description" class="text my-0"></p>
+        <button class="btn btn-info my-2" id="des_btn">Read More</button>
+      </div>
+    </div>
+    <div class="p-3 info position-absolute top-0 start-50 z-3 w-50" id="info-2">
+      <div class="d-flex">
+        <div class="platforms my-4 p-2 w-50">
+          <div class="text3">Platforms</div>
+          <div id="platforms" class="text2 my-0"></div>
+        </div>
+        <div class="metacritic my-4 p-2 w-50">
+          <div class="text3">Metacritic Score</div>
+          <div
+            id="metacritic"
+            class="p-1"
+            style="border-radius: 3px; width: fit-content"
+          ></div>
+        </div>
+      </div>
+      <div class="d-flex">
+        <div class="publishers my-4 p-2 w-50">
+          <div class="text my-0">Publisher</div>
+          <div id="publishers" class="text2 my-0"></div>
+        </div>
+        <div class="developers my-4 p-2 w-50">
+          <div class="text my-0">Developer</div>
+          <div id="developers" class="text2 my-0"></div>
+        </div>
+      </div>
+      <div class="d-flex">
+        <div class="esrb_rating my-4 p-2 w-50">
+          <div class="text my-0">Age rating</div>
+          <div id="esrb_rating" class="text2 my-0"></div>
+        </div>
+        <div class="genres my-4 p-2 w-50">
+          <div class="text my-0">Genres</div>
+          <div id="genres" class="text2 my-0"></div>
+        </div>
+      </div>
+      <div class="stores my-4 p-2">
+        <div class="text my-0">Stores</div>
+        <div id="stores" class="text2 my-0"></div>
+      </div>
+      <div class="games_in_series my-4 p-2">
+        <div class="text my-0">Other games in the series</div>
+        <div id="games_in_series" class="text2 my-0"></div>
+      </div>
+      <div class="DLCs my-4 p-2">
+        <div class="text my-0">DLC's and editions</div>
+        <div id="DLCs" class="text2 my-0"></div>
+      </div>
+      <div class="tags my-4 p-2">
+        <div class="text my-0">Tags</div>
+        <div id="tags" class="text2 my-0"></div>
+      </div>
+      <div class="website my-4 p-2">
+        <div class="text my-0">Website</div>
+        <div id="website" class="text2 my-0"></div>
+      </div>
+    </div>
+    <div class="p-4 position-relative my-3" id="info-games">
+      <div class="text-white mb-3 fs-4">More from the same publishers</div>
+      <div class="d-flex gap-4 scrollable info-games" id="same-publisher-list">
+        <div class="spinner-border mx-auto" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <div class="text-white mb-3 mt-4 fs-4">More from the same developers</div>
+      <div class="d-flex gap-4 scrollable info-games" id="same-developer-list">
+        <div class="spinner-border mx-auto" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="../static/js/utils.js"></script>
+    <script src="../static/js/info.js" type="module"></script>
+  </body>
+</html>

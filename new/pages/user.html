@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User information</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.css"
+    />
+    <link rel="stylesheet" href="../static/css/index.css" />
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"
+      integrity="sha512-K/oyQtMXpxI4+K0W7H25UopjM8pzq0yrVdFdG21Fh5dBe91I40pDd9A4lzNlHPHBIP2cwZuoxaUSX0GJSObvGA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <!-- Toast Success -->
+    <div
+      id="toastSuccess"
+      class="toast align-items-center text-bg-success border-0 position-fixed top-0 start-50 translate-middle-x mt-3 z-3"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
+      <div class="d-flex">
+        <div class="toast-body" id="toastSuccessBody"></div>
+        <button
+          type="button"
+          class="btn-close btn-close-white me-2 m-auto"
+          data-bs-dismiss="toast"
+        ></button>
+      </div>
+    </div>
+
+    <!-- Toast Danger -->
+    <div
+      id="toastDanger"
+      class="toast align-items-center text-bg-danger border-0 position-fixed top-0 start-50 translate-middle-x mt-3 z-3"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
+      <div class="d-flex">
+        <div class="toast-body" id="toastDangerBody"></div>
+        <button
+          type="button"
+          class="btn-close btn-close-white me-2 m-auto"
+          data-bs-dismiss="toast"
+        ></button>
+      </div>
+    </div>
+
+    <div class="m-4">
+      <!-- Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="mb-0">
+          <i class="fa-solid fa-user-circle me-2"></i>Account information
+        </h4>
+        <button class="btn btn-outline-danger btn-sm" id="logoutBtn">
+          <i class="fa-solid fa-right-from-bracket me-1"></i>Log out
+        </button>
+      </div>
+
+      <form class="row g-3 needs-validation" id="userForm" novalidate>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text bg-white"
+              ><i class="fa-solid fa-user text-secondary"></i
+            ></span>
+            <div class="form-floating flex-grow-1">
+              <input
+                type="text"
+                class="form-control"
+                id="inputName"
+                placeholder="Username"
+                disabled
+              />
+              <label for="inputName">Username</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text bg-white"
+              ><i class="fa-solid fa-envelope text-secondary"></i
+            ></span>
+            <div class="form-floating flex-grow-1">
+              <input
+                type="email"
+                class="form-control"
+                id="inputEmail"
+                placeholder="Email"
+                required
+              />
+              <label for="inputEmail">Email</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text bg-white"
+              ><i class="fa-solid fa-venus-mars text-secondary"></i
+            ></span>
+            <div class="form-floating flex-grow-1">
+              <select class="form-select" id="inputGender" required>
+                <option value="" disabled>Choose gender...</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other...</option>
+              </select>
+              <label for="inputGender">Gender</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text bg-white"
+              ><i class="fa-solid fa-calendar-days text-secondary"></i
+            ></span>
+            <div class="form-floating flex-grow-1">
+              <input
+                type="text"
+                class="form-control"
+                id="inputDOB"
+                placeholder="dd/mm/yyyy"
+                required
+              />
+              <label for="inputDOB">Date of birth</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Change password section -->
+        <div class="col-12 mt-2">
+          <hr />
+          <h6 class="text-muted">
+            Change password
+            <small class="fw-normal">(Leave blank if you don't want to change it.)</small>
+          </h6>
+        </div>
+
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text bg-white"
+              ><i class="fa-solid fa-lock text-secondary"></i
+            ></span>
+            <div class="form-floating flex-grow-1">
+              <input
+                type="password"
+                class="form-control"
+                id="inputOldPassword"
+                placeholder="Old password"
+              />
+              <label for="inputOldPassword">Old password</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text bg-white"
+              ><i class="fa-solid fa-lock text-secondary"></i
+            ></span>
+            <div class="form-floating flex-grow-1">
+              <input
+                type="password"
+                class="form-control"
+                id="inputNewPassword"
+                placeholder="New password"
+              />
+              <label for="inputNewPassword">New password</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-grid gap-2 col-6 mx-auto mt-2">
+          <button type="submit" class="btn btn-outline-primary">
+            <i class="fa-solid fa-floppy-disk me-1"></i>Save change
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script src="../static/js/user.js" type="module"></script>
+  </body>
+</html>
