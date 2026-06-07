@@ -63,9 +63,4 @@ document.getElementById("userForm").addEventListener("submit", (e) => {
   document.getElementById("inputNewPassword").value = "";
 });
 
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  sessionStorage.removeItem("user");
-  window.location.href = "./signin.html";
-});
-
 createNavbar();

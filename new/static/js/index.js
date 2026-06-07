@@ -1,9 +1,10 @@
-var orderings = ["-added", "-metacritic", "-rating", "-released"];
+var orderings = ["-added", "-metacritic", "-rating", "-released", "-updated"];
 var replacements = {
   "-added": "Most Popular",
   "-metacritic": "Top Rated",
   "-rating": "Highest Rated",
   "-released": "Newest Releases",
+  "-updated": "Newest Updated",
 };
 var MY_API_KEY = "1c6fb51e9d0c417ba4f34ffe358648f2";
 

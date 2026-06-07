@@ -34,11 +34,6 @@ export function createNavbar() {
             <i class="fa-solid fa-layer-group me-1"></i> Collection
           </a>
         </li>
-        <li class="nav-item" id="user-link">
-          <a class="nav-link rounded px-3" href="./signin.html">
-            <i class="fa-solid fa-right-to-bracket me-1"></i> Đăng nhập
-          </a>
-        </li>
         <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle"
@@ -117,6 +112,11 @@ export function createNavbar() {
               />
             </div>
           </form>
+        </li>
+        <li class="nav-item" id="user-link">
+          <a class="nav-link rounded px-3" href="./signin.html">
+            <i class="fa-solid fa-right-to-bracket me-1"></i> Đăng nhập
+          </a>
         </li>
       </ul>
     </div>
@@ -403,15 +403,21 @@ export function appendGames(results, parent_el, onRemove = null) {
       });
 
       window.addEventListener("storage", (e) => {
-        const userObj = getCurrentUser();
-        const wishlistData = userObj[1].wishlist || [];
-        const favouritesData = userObj[1].favourites || [];
-        if (wishlistData.find((curr) => curr.id === game.id))
+        const userProfile = getWishlistAndFavourites();
+        if (userProfile[1].find((curr) => curr.id === game.id)) {
           wishlistBtn.classList.replace("btn-success", "btn-danger");
-        else wishlistBtn.classList.replace("btn-danger", "btn-success");
-        if (favouritesData.find((curr) => curr.id === game.id))
+          wishlistBtn.setAttribute("data-bs-title", "Remove from wishlist");
+        } else {
+          wishlistBtn.classList.replace("btn-danger", "btn-success");
+          wishlistBtn.setAttribute("data-bs-title", "Add to wishlist");
+        }
+        if (userProfile[2].find((curr) => curr.id === game.id)) {
           favouritesBtn.classList.replace("btn-success", "btn-danger");
-        else favouritesBtn.classList.replace("btn-danger", "btn-success");
+          favouritesBtn.setAttribute("data-bs-title", "Remove from favourites");
+        } else {
+          favouritesBtn.classList.replace("btn-danger", "btn-success");
+          favouritesBtn.setAttribute("data-bs-title", "Add to favourites");
+        }
       });
     }
 
@@ -434,7 +440,38 @@ export function appendGames(results, parent_el, onRemove = null) {
 export function checkLoginStatus(name) {
   const userLink = document.getElementById("user-link");
   if (!userLink) return;
-  userLink.innerHTML = `<a class="nav-link rounded px-3" href="./user.html"><i class="fa-solid fa-user me-1"></i>${name}</a>`;
+  userLink.innerHTML = `<div class="dropdown">
+    <button
+      class="btn btn-secondary dropdown-toggle"
+      type="button"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      <i class="fa-solid fa-user me-1"></i>User
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+      <li>
+        <button class="btn btn-outline-danger btn-sm logoutBtn">
+          <i class="fa-solid fa-right-from-bracket me-1"></i>Log out
+        </button>
+      </li>
+      <li>
+        <a class="dropdown-item" href="./user.html"
+          ><i class="fa-solid fa-user me-1"></i
+        >${name}</a>
+      </li>
+    </ul>
+  </div>`;
+
+  userLink.querySelector(".logoutBtn").addEventListener("click", () => {
+    sessionStorage.removeItem("user");
+    let registrationData = getRegistrationData();
+    registrationData.forEach(([key, value]) => {
+      value.keepSignIn = false;
+      localStorage.setItem(key, JSON.stringify(value));
+    });
+    window.location.href = "./signin.html";
+  });
 }
 
 export function getRegistrationData() {

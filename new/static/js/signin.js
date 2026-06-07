@@ -52,7 +52,7 @@ signinForm.addEventListener("submit", function (event) {
         originalKey: "registrationData_0",
       }),
     );
-    window.location.href = "../index.html";
+    window.location.href = "./index.html";
     checkLoginStatus(admin_account.name);
     return;
   }

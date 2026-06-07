@@ -155,8 +155,8 @@ async function displayGameInfo() {
   const game_description = document.getElementById("description");
   const description_container = document.querySelector(".description");
   const des_expand_btn = document.getElementById("des_btn");
-  const rating_containers = document.querySelectorAll(".rating-container");
-  const rating_counters = document.querySelectorAll(".rating-counter");
+  const rating_containers = document.getElementById("rating-containers");
+  const rating_counters = document.getElementById("rating-counters");
   const platforms_container = document.getElementById("platforms");
   const metacritic_score = document.getElementById("metacritic");
   const age_rating = document.getElementById("esrb_rating");
@@ -271,12 +271,34 @@ async function displayGameInfo() {
 
   //game rating logic
   if (gameInfo.ratings && gameInfo.ratings.length > 0) {
-    rating_containers.forEach((container, idx) => {
-      container.style.width = `${gameInfo.ratings[idx].percent}%`;
-      container.style.height = "75px";
-    });
-    rating_counters.forEach((counter, idx) => {
-      counter.innerHTML += `<span class="text">${gameInfo.ratings[idx].title}</span><br/><span class="text3">${gameInfo.ratings[idx].percent}%</span>`;
+    // rating_containers.forEach((container, idx) => {
+    //   container.style.width = `${gameInfo.ratings[idx].percent}%`;
+    //   container.style.height = "75px";
+    // });
+    gameInfo.ratings.forEach((rating, idx, arr) => {
+      const rating_container = document.createElement("div");
+      rating_container.classList.add(rating.title);
+      if (arr.length == 1) rating_container.classList.add(`rounded`);
+      else {
+        switch (idx) {
+          case 0:
+            rating_container.classList.add("rounded-start");
+            break;
+          case arr.length - 1:
+            rating_container.classList.add("rounded-end");
+        }
+      }
+      rating_container.style.width = rating.percent + "%";
+      rating_container.style.height = "75px";
+      console.log(rating_container);
+      rating_containers.appendChild(rating_container);
+      const rating_counter = document.createElement("div");
+      rating_counter.innerHTML = `<div
+            class="d-flex rounded-pill border rating-counter gap-2 align-items-center p-1"
+          >
+            <div class="${rating.title} rounded-circle"></div><span class="text">${rating.title}</span><br/><span class="text3">${rating.percent}%</span>
+          </div>`;
+      rating_counters.appendChild(rating_counter);
     });
   } else {
     document.getElementById("ratings").remove();
