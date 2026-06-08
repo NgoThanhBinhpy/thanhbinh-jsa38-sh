@@ -3,6 +3,7 @@ import {
   showToast,
   getCurrentUser,
   getWishlistAndFavourites,
+  setupWishlistFavourites,
 } from "./utils.js";
 
 const params = new URLSearchParams(window.location.search);
@@ -66,84 +67,29 @@ async function getSameDeveloperGames(developers) {
 }
 
 function setupWishlistFavourite(gameInfo) {
-  const session = JSON.parse(sessionStorage.getItem("user"));
   const wishlistBtn = document.getElementById("wishlist-btn");
   const favouriteBtn = document.getElementById("favourite-btn");
-  const gameData = {
-    id: gameInfo.id,
-    name: gameInfo.name,
-    background_image: gameInfo.background_image,
-  };
-
-  const userProfile = getWishlistAndFavourites();
-  console.log(userProfile);
-  if (!userProfile[0]) window.location.href = "./signin.html";
-
-  const inWishlist = userProfile[1].find((g) => g.id === gameInfo.id);
-  const inFavourites = userProfile[2].find((g) => g.id === gameInfo.id);
-
-  if (inWishlist) {
-    wishlistBtn.innerHTML = `<i class="fa-solid fa-bookmark me-1"></i> Wishlisted`;
-    wishlistBtn.classList.replace("btn-outline-light", "btn-light");
-  }
-  if (inFavourites) {
-    favouriteBtn.innerHTML = `<i class="fa-solid fa-heart me-1"></i> Favourited`;
-    favouriteBtn.classList.replace("btn-outline-light", "btn-light");
-  }
-
-  wishlistBtn.addEventListener("click", () => {
-    const idx = userProfile[1].findIndex((g) => g.id === gameInfo.id);
-    if (idx === -1) {
-      userProfile[1].push(gameData);
+  setupWishlistFavourites(
+    gameInfo,
+    wishlistBtn,
+    favouriteBtn,
+    () => {
       wishlistBtn.innerHTML = `<i class="fa-solid fa-bookmark me-1"></i> Wishlisted`;
       wishlistBtn.classList.replace("btn-outline-light", "btn-light");
-      showToast("success", `${gameInfo.name} added to wishlist!`);
-    } else {
-      userProfile[1].splice(idx, 1);
+    },
+    () => {
       wishlistBtn.innerHTML = `<i class="fa-regular fa-bookmark me-1"></i> Add to Wishlist`;
       wishlistBtn.classList.replace("btn-light", "btn-outline-light");
-      showToast("danger", `${gameInfo.name} removed from wishlist!`);
-    }
-    localStorage.setItem(userProfile[0][0], JSON.stringify(userProfile[0][1]));
-  });
-
-  favouriteBtn.addEventListener("click", () => {
-    const idx = userProfile[2].findIndex((g) => g.id === gameInfo.id);
-    if (idx === -1) {
-      userProfile[2].push(gameData);
+    },
+    () => {
       favouriteBtn.innerHTML = `<i class="fa-solid fa-heart me-1"></i> Favourited`;
       favouriteBtn.classList.replace("btn-outline-light", "btn-light");
-      showToast("success", `${gameInfo.name} added to favourites!`);
-    } else {
-      userProfile[2].splice(idx, 1);
+    },
+    () => {
       favouriteBtn.innerHTML = `<i class="fa-regular fa-heart me-1"></i> Add to Favourites`;
       favouriteBtn.classList.replace("btn-light", "btn-outline-light");
-      showToast("danger", `${gameInfo.name} removed from favourites!`);
-    }
-    localStorage.setItem(userProfile[0][0], JSON.stringify(userProfile[0][1]));
-  });
-
-  window.addEventListener("storage", (e) => {
-    const userObj = getCurrentUser();
-    const inWishlist = userObj[1].wishlist.find((g) => g.id === gameInfo.id);
-    const inFavourites = userObj[1].favourites.find(
-      (g) => g.id === gameInfo.id,
-    );
-    if (inWishlist) {
-      wishlistBtn.innerHTML = `<i class="fa-solid fa-bookmark me-1"></i> Wishlisted`;
-      wishlistBtn.classList.replace("btn-outline-light", "btn-light");
-    } else {
-      wishlistBtn.innerHTML = `<i class="fa-regular fa-bookmark me-1"></i> Add to Wishlist`;
-      wishlistBtn.classList.replace("btn-light", "btn-outline-light");
-    }
-    if (inFavourites) {
-      favouriteBtn.innerHTML = `<i class="fa-solid fa-heart me-1"></i> Favourited`;
-      favouriteBtn.classList.replace("btn-outline-light", "btn-light");
-    } else {
-      favouriteBtn.innerHTML = `<i class="fa-regular fa-heart me-1"></i> Add to Favourites`;
-      favouriteBtn.classList.replace("btn-light", "btn-outline-light");
-    }
-  });
+    },
+  );
 }
 
 async function displayGameInfo() {
@@ -177,6 +123,8 @@ async function displayGameInfo() {
     el.classList.remove("placeholder", "placeholder-glow", "disable");
   });
   setupWishlistFavourite(gameInfo);
+
+  document.title = gameInfo.name + "'s information";
 
   value.forEach((curr) => {
     const el = document.getElementById(curr);

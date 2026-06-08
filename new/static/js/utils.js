@@ -328,87 +328,28 @@ export function appendGames(results, parent_el, onRemove = null) {
       const wishlistBtn = game_item.querySelector(".wishlist");
       const favouritesBtn = game_item.querySelector(".favourites");
       const userProfile = getWishlistAndFavourites();
-      const gameData = {
-        id: game.id,
-        name: game.name,
-        background_image: game.background_image,
-      };
-      if (userProfile[1].find((curr) => curr.id === game.id)) {
-        wishlistBtn.classList.replace("btn-success", "btn-danger");
-        wishlistBtn.setAttribute("data-bs-title", "Remove from wishlist");
-      }
-      if (userProfile[2].find((curr) => curr.id === game.id)) {
-        favouritesBtn.classList.replace("btn-success", "btn-danger");
-        favouritesBtn.setAttribute("data-bs-title", "Remove from favourites");
-      }
 
-      wishlistBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const userProfile = getWishlistAndFavourites();
-        const idx = userProfile[1].findIndex((g) => g.id === game.id);
-        if (idx === -1) {
-          userProfile[1].push(gameData);
+      setupWishlistFavourites(
+        game,
+        wishlistBtn,
+        favouritesBtn,
+        () => {
           wishlistBtn.classList.replace("btn-success", "btn-danger");
           wishlistBtn.setAttribute("data-bs-title", "Remove from wishlist");
-          console.log(userProfile);
-          showToast("success", `${game.name} added to wishlist!`);
-        } else {
-          userProfile[1].splice(idx, 1);
+        },
+        () => {
           wishlistBtn.classList.replace("btn-danger", "btn-success");
           wishlistBtn.setAttribute("data-bs-title", "Add to wishlist");
-          console.log(userProfile, idx);
-          showToast("danger", `${game.name} removed from wishlist!`);
-        }
-        localStorage.setItem(
-          userProfile[0][0],
-          JSON.stringify(userProfile[0][1]),
-        );
-        updateCollectionCount();
-      });
-
-      favouritesBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const userProfile = getWishlistAndFavourites();
-        const idx = userProfile[2].findIndex((g) => g.id === game.id);
-        if (idx === -1) {
-          userProfile[2].push(gameData);
+        },
+        () => {
           favouritesBtn.classList.replace("btn-success", "btn-danger");
           favouritesBtn.setAttribute("data-bs-title", "Remove from favourites");
-          console.log(userProfile);
-          showToast("success", `${game.name} added to favourites!`);
-        } else {
-          userProfile[2].splice(idx, 1);
+        },
+        () => {
           favouritesBtn.classList.replace("btn-danger", "btn-success");
           favouritesBtn.setAttribute("data-bs-title", "Add to favourites");
-          console.log(userProfile, idx);
-          showToast("danger", `${game.name} removed from favourites!`);
-        }
-        localStorage.setItem(
-          userProfile[0][0],
-          JSON.stringify(userProfile[0][1]),
-        );
-        updateCollectionCount();
-      });
-
-      window.addEventListener("storage", (e) => {
-        const userProfile = getWishlistAndFavourites();
-        if (userProfile[1].find((curr) => curr.id === game.id)) {
-          wishlistBtn.classList.replace("btn-success", "btn-danger");
-          wishlistBtn.setAttribute("data-bs-title", "Remove from wishlist");
-        } else {
-          wishlistBtn.classList.replace("btn-danger", "btn-success");
-          wishlistBtn.setAttribute("data-bs-title", "Add to wishlist");
-        }
-        if (userProfile[2].find((curr) => curr.id === game.id)) {
-          favouritesBtn.classList.replace("btn-success", "btn-danger");
-          favouritesBtn.setAttribute("data-bs-title", "Remove from favourites");
-        } else {
-          favouritesBtn.classList.replace("btn-danger", "btn-success");
-          favouritesBtn.setAttribute("data-bs-title", "Add to favourites");
-        }
-      });
+        },
+      );
     }
 
     parent_el.appendChild(game_item);
@@ -469,7 +410,11 @@ export function getRegistrationData() {
     .filter(([key]) => key.startsWith("registrationData_"))
     .map(([key, value]) => [key, JSON.parse(value)]);
 }
-
+/**
+ *
+ * @param {String} type
+ * @param {String} message
+ */
 export function showToast(type, message) {
   const toast = document.getElementById(
     `toast${type.charAt(0).toUpperCase() + type.slice(1)}`,
@@ -502,4 +447,77 @@ export function getWishlistAndFavourites() {
   const wishlist = currentUser[1].wishlist;
   const favourites = currentUser[1].favourites;
   return [currentUser, wishlist, favourites];
+}
+
+/**
+ * @param {{id:Number,name:String,background_image:String}} gameInfo
+ * @param {HTMLButtonElement} wishlistBtn
+ * @param {HTMLButtonElement} favouriteBtn
+ * @param {()=>void} wishlistTrue
+ * @param {()=>void} wishlistFalse
+ * @param {()=>void} favouritesTrue
+ * @param {()=>void} favouritesFalse
+ */
+export function setupWishlistFavourites(
+  gameInfo,
+  wishlistBtn,
+  favouriteBtn,
+  wishlistTrue,
+  wishlistFalse,
+  favouritesTrue,
+  favouritesFalse,
+) {
+  const gameData = {
+    id: gameInfo.id,
+    name: gameInfo.name,
+    background_image: gameInfo.background_image,
+  };
+  const userProfile = getWishlistAndFavourites();
+  if (!userProfile[0]) window.location.href = "./signin.html";
+
+  if (userProfile[1].find((g) => g.id === gameInfo.id)) wishlistTrue();
+  if (userProfile[2].find((g) => g.id === gameInfo.id)) favouritesTrue();
+
+  wishlistBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const userProfile = getWishlistAndFavourites();
+    const idx = userProfile[1].findIndex((g) => g.id === gameInfo.id);
+    if (idx === -1) {
+      userProfile[1].push(gameData);
+      wishlistTrue();
+      showToast("success", `${gameInfo.name} added to wishlist!`);
+    } else {
+      userProfile[1].splice(idx, 1);
+      wishlistFalse();
+      showToast("danger", `${gameInfo.name} removed from wishlist!`);
+    }
+    localStorage.setItem(userProfile[0][0], JSON.stringify(userProfile[0][1]));
+    updateCollectionCount();
+  });
+
+  favouriteBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const userProfile = getWishlistAndFavourites();
+    const idx = userProfile[2].findIndex((g) => g.id === gameInfo.id);
+    if (idx === -1) {
+      userProfile[2].push(gameData);
+      favouritesTrue();
+      showToast("success", `${gameInfo.name} added to favourites!`);
+    } else {
+      userProfile[2].splice(idx, 1);
+      favouritesFalse();
+      showToast("danger", `${gameInfo.name} removed from favourites!`);
+    }
+    localStorage.setItem(userProfile[0][0], JSON.stringify(userProfile[0][1]));
+    updateCollectionCount();
+  });
+
+  window.addEventListener("storage", (e) => {
+    const userProfile = getWishlistAndFavourites();
+    if (userProfile[1].find((g) => g.id === gameInfo.id)) wishlistTrue();
+    else wishlistFalse();
+    if (userProfile[2].find((g) => g.id === gameInfo.id)) favouritesTrue();
+    else favouritesFalse();
+    updateCollectionCount();
+  });
 }
