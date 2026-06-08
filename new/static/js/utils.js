@@ -272,36 +272,26 @@ function createNavBarSection(section, sectionArr, Name, IdOrSlug) {
 }
 
 export function updateCollectionCount() {
-  const session = JSON.parse(sessionStorage.getItem("user"));
-  if (!session) return;
+  const data = getWishlistAndFavourites();
 
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key.startsWith("registrationData_")) {
-      const data = JSON.parse(localStorage.getItem(key));
-      if (data.name === session.name) {
-        const wishlistCount = (data.wishlist || []).length;
-        const favouritesCount = (data.favourites || []).length;
-        const total = wishlistCount + favouritesCount;
-        const collectionLink = document.querySelector(
-          "a[href='./collection.html']",
-        );
-        if (!collectionLink) return;
-        collectionLink.setAttribute("data-bs-toggle", "tooltip");
-        collectionLink.setAttribute("data-bs-placement", "bottom");
-        collectionLink.setAttribute(
-          "title",
-          `${wishlistCount} wishlisted · ${favouritesCount} favourited`,
-        );
-        new bootstrap.Tooltip(collectionLink);
-        const existing = collectionLink.querySelector(".badge");
-        if (existing) existing.remove();
-        if (total > 0) {
-          collectionLink.innerHTML += `<span class="badge bg-danger ms-1" style="font-size:0.65rem;">${total}</span>`;
-        }
-        break;
-      }
-    }
+  if (!data[0]) window.location.href = "./signin.html";
+
+  const wishlistCount = (data[1] || []).length;
+  const favouritesCount = (data[2] || []).length;
+  const total = wishlistCount + favouritesCount;
+  const collectionLink = document.querySelector("a[href='./collection.html']");
+  if (!collectionLink) return;
+  collectionLink.setAttribute("data-bs-toggle", "tooltip");
+  collectionLink.setAttribute("data-bs-placement", "bottom");
+  collectionLink.setAttribute(
+    "title",
+    `${wishlistCount} wishlisted · ${favouritesCount} favourited`,
+  );
+  new bootstrap.Tooltip(collectionLink);
+  const existing = collectionLink.querySelector(".badge");
+  if (existing) existing.remove();
+  if (total > 0) {
+    collectionLink.innerHTML += `<span class="badge bg-danger ms-1" style="font-size:0.65rem;">${total}</span>`;
   }
 }
 
@@ -449,14 +439,14 @@ export function checkLoginStatus(name) {
     >
       <i class="fa-solid fa-user me-1"></i>User
     </button>
-    <ul class="dropdown-menu dropdown-menu-end">
-      <li>
-        <button class="btn btn-outline-danger btn-sm logoutBtn">
+    <ul class="dropdown-menu dropdown-menu-end" style="width:fit-content;min-width:8rem">
+      <li style="width:fit-content">
+        <button class="btn btn-outline-danger btn-sm logoutBtn" style="width:fit-content">
           <i class="fa-solid fa-right-from-bracket me-1"></i>Log out
         </button>
       </li>
-      <li>
-        <a class="dropdown-item" href="./user.html"
+      <li style="width:fit-content">
+        <a class="dropdown-item" href="./user.html" style="width:fit-content"
           ><i class="fa-solid fa-user me-1"></i
         >${name}</a>
       </li>

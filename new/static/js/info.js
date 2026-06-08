@@ -271,10 +271,6 @@ async function displayGameInfo() {
 
   //game rating logic
   if (gameInfo.ratings && gameInfo.ratings.length > 0) {
-    // rating_containers.forEach((container, idx) => {
-    //   container.style.width = `${gameInfo.ratings[idx].percent}%`;
-    //   container.style.height = "75px";
-    // });
     gameInfo.ratings.forEach((rating, idx, arr) => {
       const rating_container = document.createElement("div");
       rating_container.classList.add(rating.title);
@@ -296,12 +292,10 @@ async function displayGameInfo() {
       rating_counter.innerHTML = `<div
             class="d-flex rounded-pill border rating-counter gap-2 align-items-center p-1"
           >
-            <div class="${rating.title} rounded-circle"></div><span class="text">${rating.title}</span><br/><span class="text3">${rating.percent}%</span>
+            <div class="${rating.title} rounded-circle"></div><span class="text">${rating.title}</span><br/><span class="text3">${rating.count}</span>
           </div>`;
       rating_counters.appendChild(rating_counter);
     });
-  } else {
-    document.getElementById("ratings").remove();
   }
 
   //description logic
