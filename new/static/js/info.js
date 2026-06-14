@@ -4,6 +4,7 @@ import {
   getCurrentUser,
   getWishlistAndFavourites,
   setupWishlistFavourites,
+  MY_API_KEY,
 } from "./utils.js";
 
 const params = new URLSearchParams(window.location.search);
@@ -11,7 +12,6 @@ const id = params.get("id");
 if (!id?.trim()) {
   window.location.href = "./index.html";
 }
-const MY_API_KEY = "1c6fb51e9d0c417ba4f34ffe358648f2";
 
 async function getGameInfo(id) {
   return await fetch(`https://api.rawg.io/api/games/${id}?key=${MY_API_KEY}`)
@@ -283,7 +283,7 @@ async function displayGameInfo() {
     game_img.classList.add("w-100", "h-100", "object-fit-cover");
     document.body.prepend(game_img);
     game_img.onload = () => {
-      color_overlay.style.height = `${game_img.offsetHeight}px`;
+      color_overlay.style.height = game_img.offsetHeight + "px";
       const heights = Array.from(document.querySelectorAll(".info")).map(
         (c) => c.offsetHeight,
       );
@@ -309,18 +309,22 @@ async function displayGameInfo() {
   const samePubsGames = await getSamePublisherGames(
     gameInfo.publishers.map((pub) => pub.slug),
   );
-  appendGames(
-    sameDevsGames.results
-      .map((game) => (game.slug === gameInfo.slug ? undefined : game))
-      .filter(Boolean),
-    document.getElementById("same-developer-list"),
-  );
-  appendGames(
-    samePubsGames.results
-      .map((game) => (game.slug === gameInfo.slug ? undefined : game))
-      .filter(Boolean),
-    document.getElementById("same-publisher-list"),
-  );
+  if (sameDevsGames.results)
+    appendGames(
+      sameDevsGames.results
+        .map((game) => (game.slug === gameInfo.slug ? undefined : game))
+        .filter(Boolean),
+      document.getElementById("same-developer-list"),
+    );
+  else document.getElementById("same-developer-container").remove();
+  if (samePubsGames.results)
+    appendGames(
+      samePubsGames.results
+        .map((game) => (game.slug === gameInfo.slug ? undefined : game))
+        .filter(Boolean),
+      document.getElementById("same-publisher-list"),
+    );
+  else document.getElementById("same-publisher-container").remove();
 }
 
 displayGameInfo();

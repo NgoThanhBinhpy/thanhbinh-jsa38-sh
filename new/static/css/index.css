@@ -94,6 +94,9 @@ a {
 .exceptional {
   background: linear-gradient(180deg, #b4ec51, #429321);
 }
+.exceptional:hover {
+  box-shadow: #fff;
+}
 .recommended {
   background: linear-gradient(180deg, #2196f3, #1976d2);
 }
@@ -177,13 +180,20 @@ input[type="checkbox"] {
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #ccc;
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #999;
+}
+
+.unscrollableY {
+  overflow-y: hidden;
 }

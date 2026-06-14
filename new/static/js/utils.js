@@ -1,142 +1,140 @@
-export function createNavbar() {
-  if (!getCurrentUser) {
-    window.location.href = "./signin.html";
+export const MY_API_KEY = "1c6fb51e9d0c417ba4f34ffe358648f2";
+
+/**
+ * @typedef {Object} GameItem
+ * @property {number} id
+ * @property {string} name
+ * @property {string} background_image
+ */
+
+/**
+ * @typedef {Object} UserProfile
+ * @property {string} dob
+ * @property {string} email
+ * @property {number} id
+ * @property {string} name
+ * @property {string} password
+ * @property {string} gender
+ * @property {boolean} keepSignIn
+ * @property {GameItem[]} favourites
+ * @property {GameItem[]} wishlist
+ */
+
+/**
+ * @returns {Array<[string, UserProfile]>|undefined}
+ */
+export function getRegistrationData() {
+  return Object.entries(localStorage)
+    .filter(([key]) => key.startsWith("registrationData_"))
+    .map(([key, value]) => [key, JSON.parse(value)]);
+}
+
+/**
+ * @returns {[string, UserProfile]|undefined}
+ */
+export function getCurrentUser() {
+  const session = JSON.parse(sessionStorage.getItem("user"));
+  if (session) {
+    return [
+      session.originalKey,
+      JSON.parse(localStorage.getItem(session.originalKey)),
+    ];
   }
-  var Navbar = document.createElement("div");
-  Navbar.innerHTML = `<nav
-  class="navbar navbar-expand-lg px-3 position-sticky top-0"
-  style="z-index: 1060"
->
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#" draggable="false">
-      <i class="fa-solid fa-vault me-2"></i>GameVault
-    </a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto gap-1 mt-2 mt-lg-0">
-        <li class="nav-item">
-          <a class="nav-link rounded px-3" href="./index.html"
-            ><i class="fa-solid fa-house me-1"></i> Home</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link rounded px-3" href="./collection.html">
-            <i class="fa-solid fa-layer-group me-1"></i> Collection
-          </a>
-        </li>
-        <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            role="button"
-            data-bs-toggle="dropdown"
-            data-bs-auto-close="outside"
-          >
-            <i class="fa-solid fa-compass me-1"></i> Explore
-          </a>
-          <ul class="dropdown-menu">
-            <li class="dropstart">
-              <a
-                class="dropdown-item dropdown-toggle"
-                href="#"
-                data-bs-toggle="dropdown"
-              >
-                <i class="fa-solid fa-layer-group fa-xs me-1"></i> Genres
+  return getRegistrationData().find(([key, value]) => value.keepSignIn);
+}
+
+/**
+ * @returns {[ [string, UserProfile]|null, GameItem[], GameItem[] ]}
+ */
+export function getWishlistAndFavourites() {
+  const currentUser = getCurrentUser();
+  if (!currentUser) return [null, [], []];
+  if (!currentUser[1].wishlist) currentUser[1].wishlist = [];
+  if (!currentUser[1].favourites) currentUser[1].favourites = [];
+  return [currentUser, currentUser[1].wishlist, currentUser[1].favourites];
+}
+
+export function createNavbar() {
+  const currentUser = getCurrentUser();
+  if (!currentUser) {
+    window.location.href = "./signin.html";
+    return;
+  }
+
+  let Navbar = document.createElement("div");
+  Navbar.classList.add("position-sticky", "top-0");
+  Navbar.style.zIndex = "1060";
+  Navbar.innerHTML = `<nav class="navbar navbar-expand-lg px-3">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#" draggable="false">
+          <i class="fa-solid fa-vault me-2"></i>GameVault
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto gap-1 mt-2 mt-lg-0">
+            <li class="nav-item"><a class="nav-link rounded px-3" href="./index.html"><i class="fa-solid fa-house me-1"></i> Home</a></li>
+            <li class="nav-item"><a class="nav-link rounded px-3" href="./collection.html"><i class="fa-solid fa-layer-group me-1"></i> Collection</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                <i class="fa-solid fa-compass me-1"></i> Explore
               </a>
-              <ul class="dropdown-menu dropdown-menu-start">
-                <div class="row row-cols-2 g-1 dropdown-content"></div>
+              <ul class="dropdown-menu">
+                <li class="dropstart">
+                  <a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="fa-solid fa-layer-group fa-xs me-1"></i> Genres</a>
+                  <ul class="dropdown-menu dropdown-menu-start"><div class="row row-cols-2 g-1 dropdown-content"></div></ul>
+                </li>
+                <li class="dropstart">
+                  <a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="fa-solid fa-tag fa-xs me-1"></i> Tags</a>
+                  <ul class="dropdown-menu dropdown-menu-start"><div class="row row-cols-2 g-1 dropdown-content-1"></div></ul>
+                </li>
+                <li class="dropstart">
+                  <a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="fa-solid fa-desktop fa-xs me-1"></i> Platforms</a>
+                  <ul class="dropdown-menu dropdown-menu-start"><div class="row row-cols-2 g-1 dropdown-content-2"></div></ul>
+                </li>
+                <li class="dropstart">
+                  <a class="dropdown-item dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="fa-solid fa-store fa-xs me-1"></i> Stores</a>
+                  <ul class="dropdown-menu dropdown-menu-start"><div class="row row-cols-2 g-1 dropdown-content-3"></div></ul>
+                </li>
               </ul>
             </li>
-            <li class="dropstart">
-              <a
-                class="dropdown-item dropdown-toggle"
-                href="#"
-                data-bs-toggle="dropdown"
-              >
-                <i class="fa-solid fa-tag fa-xs me-1"></i> Tags
-              </a>
-              <ul class="dropdown-menu dropdown-menu-start">
-                <div class="row row-cols-2 g-1 dropdown-content-1"></div>
-              </ul>
+            <li class="nav-item">
+              <form class="d-flex mt-2 mt-lg-0" role="search">
+                <div class="input-group">
+                  <span class="input-group-text bg-white text-secondary border-start-0" id="search_btn"><i class="fa-solid fa-magnifying-glass"></i></span>
+                  <input class="form-control search-input border-start-0" id="search_bar" type="search" placeholder="Search games…" aria-label="Search" />
+                </div>
+              </form>
             </li>
-            <li class="dropstart">
-              <a
-                class="dropdown-item dropdown-toggle"
-                href="#"
-                data-bs-toggle="dropdown"
-              >
-                <i class="fa-solid fa-desktop fa-xs me-1"></i> Platforms
-              </a>
-              <ul class="dropdown-menu dropdown-menu-start">
-                <div class="row row-cols-2 g-1 dropdown-content-2"></div>
-              </ul>
-            </li>
-            <li class="dropstart">
-              <a
-                class="dropdown-item dropdown-toggle"
-                href="#"
-                data-bs-toggle="dropdown"
-              >
-                <i class="fa-solid fa-store fa-xs me-1"></i> Stores
-              </a>
-              <ul class="dropdown-menu dropdown-menu-start">
-                <div class="row row-cols-2 g-1 dropdown-content-3"></div>
-              </ul>
+            <li class="nav-item" id="user-link">
+              <a class="nav-link rounded px-3" href="./signin.html"><i class="fa-solid fa-right-to-bracket me-1"></i> Đăng nhập</a>
             </li>
           </ul>
-        </li>
-        <li class="nav-item">
-          <form class="d-flex mt-2 mt-lg-0" role="search">
-            <div class="input-group">
-              <span
-                class="input-group-text bg-white text-secondary border-start-0"
-                id="search_btn"
-              >
-                <i class="fa-solid fa-magnifying-glass"></i>
-              </span>
-              <input
-                class="form-control search-input border-start-0"
-                id="search_bar"
-                type="search"
-                placeholder="Search games…"
-                aria-label="Search"
-              />
-            </div>
-          </form>
-        </li>
-        <li class="nav-item" id="user-link">
-          <a class="nav-link rounded px-3" href="./signin.html">
-            <i class="fa-solid fa-right-to-bracket me-1"></i> Đăng nhập
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-`;
-  Navbar = Navbar.firstChild;
+        </div>
+      </div>
+    </nav>`;
   document.body.prepend(Navbar);
-  const search_btn = document.getElementById("search_btn");
-  const search_bar = document.getElementById("search_bar");
+
+  const search_btn = Navbar.querySelector("#search_btn");
+  const search_bar = Navbar.querySelector("#search_bar");
+
+  const handleSearch = () => {
+    if (search_bar.value.trim()) {
+      window.location.href = `./search.html?search_query=${encodeURIComponent(search_bar.value.trim())}`;
+    }
+  };
   search_btn.addEventListener("click", (e) => {
     e.preventDefault();
-    window.location.href = `./search.html?search_query=${search_bar.value}`;
+    handleSearch();
   });
   search_bar.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      window.location.href = `./search.html?search_query=${search_bar.value}`;
+      handleSearch();
     }
   });
+
   const genres = [
     { name: "RPG", icon: "fa-solid fa-dragon", slug: "role-playing-games-rpg" },
     { name: "Indie", icon: "fa-solid fa-star" },
@@ -227,6 +225,7 @@ export function createNavbar() {
       icon: "fa-solid fa-gamepad",
     },
   ];
+
   createNavBarSection(
     document.querySelector(".dropdown-content"),
     genres,
@@ -251,43 +250,46 @@ export function createNavbar() {
     "stores",
     "id",
   );
-  checkLoginStatus(getCurrentUser()[1].name);
+
+  checkLoginStatus(currentUser[1].name);
   updateCollectionCount();
 }
 
-/**
- *
- * @param {HTMLDivElement} section
- * @param {Array} sectionArr
- * @param {String} IdOrSlug
- * @param {String} Name
- */
 function createNavBarSection(section, sectionArr, Name, IdOrSlug) {
+  if (!section) return;
   sectionArr.forEach((sectionObj) => {
     const section_item = document.createElement("div");
     section_item.classList.add("col");
-    section_item.innerHTML = `<a class="dropdown-item text-wrap ps-2 pe-0" href="./explore.html?${Name}=${IdOrSlug === "id" ? sectionObj.id : sectionObj.slug || sectionObj.name.toLowerCase().replaceAll(" ", "-")}&name=${sectionObj.name}"><i class="${sectionObj.icon} fa-xs me-1"></i> ${sectionObj.name}</a>`;
+    const paramVal =
+      IdOrSlug === "id"
+        ? sectionObj.id
+        : sectionObj.slug || sectionObj.name.toLowerCase().replaceAll(" ", "-");
+    section_item.innerHTML = `<a class="dropdown-item text-wrap ps-2 pe-0" href="./explore.html?${Name}=${paramVal}&name=${encodeURIComponent(sectionObj.name)}"><i class="${sectionObj.icon} fa-xs me-1"></i> ${sectionObj.name}</a>`;
     section.appendChild(section_item);
   });
 }
 
 export function updateCollectionCount() {
   const data = getWishlistAndFavourites();
-
-  if (!data[0]) window.location.href = "./signin.html";
+  if (!data[0]) return;
 
   const wishlistCount = (data[1] || []).length;
   const favouritesCount = (data[2] || []).length;
   const total = wishlistCount + favouritesCount;
+
   const collectionLink = document.querySelector("a[href='./collection.html']");
   if (!collectionLink) return;
+
   collectionLink.setAttribute("data-bs-toggle", "tooltip");
   collectionLink.setAttribute("data-bs-placement", "bottom");
   collectionLink.setAttribute(
     "title",
     `${wishlistCount} wishlisted · ${favouritesCount} favourited`,
   );
+
+  bootstrap.Tooltip.getInstance(collectionLink)?.dispose();
   new bootstrap.Tooltip(collectionLink);
+
   const existing = collectionLink.querySelector(".badge");
   if (existing) existing.remove();
   if (total > 0) {
@@ -298,15 +300,24 @@ export function updateCollectionCount() {
 /**
  * @param {Array} results
  * @param {HTMLDivElement} parent_el
+ * @param {Function|null} onRemove
+ * @param {boolean} imageRequired
  */
-export function appendGames(results, parent_el, onRemove = null) {
+export function appendGames(
+  results,
+  parent_el,
+  onRemove = null,
+  imageRequired = false,
+) {
   parent_el.innerHTML = "";
+
+  if (imageRequired) results = results.filter((game) => game.background_image);
+
   results.forEach((game) => {
     const game_item = document.createElement("div");
     game_item.onclick = () => {
       window.open(`./info.html?id=${game.id}`, "_blank", "noopener,noreferrer");
     };
-    game_item.target = "_blank";
     game_item.classList.add("game-card", "position-relative");
     game_item.innerHTML = `
       <div class="position-relative rounded">
@@ -314,7 +325,14 @@ export function appendGames(results, parent_el, onRemove = null) {
         <div style="position:absolute; bottom:0; left:0; right:0; padding:30px 10px 10px; background:linear-gradient(transparent, rgba(0,0,0,0.85));">
           <h3 style="color:white; font-size:1rem; font-weight:600; margin:0;" class="text-truncate">${game.name}</h3>
         </div>
-        ${onRemove ? `<button class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1 remove-btn" style="z-index:2;"><i class="fa-solid fa-xmark"></i></button>` : `<div class="btn-group position-absolute end-0 top-0 m-1 z-2" role="group" aria-label="Basic mixed styles example"><button type="button" class="btn btn-success wishlist" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add to wishlist"><i class="m-1 fa-solid fa-bookmark"></i></button><button type="button" class="btn btn-success favourites" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add to favourites"><i class="m-1 fa-solid fa-heart"></i></button></div>`}
+        ${
+          onRemove
+            ? `<button class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1 remove-btn" style="z-index:2;"><i class="fa-solid fa-xmark"></i></button>`
+            : `<div class="btn-group position-absolute end-0 top-0 m-1 z-2" role="group">
+               <button type="button" class="btn btn-success wishlist" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Add to wishlist"><i class="m-1 fa-solid fa-bookmark"></i></button>
+               <button type="button" class="btn btn-success favourites" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Add to favourites"><i class="m-1 fa-solid fa-heart"></i></button>
+             </div>`
+        }
       </div>`;
 
     if (onRemove) {
@@ -327,39 +345,66 @@ export function appendGames(results, parent_el, onRemove = null) {
     } else {
       const wishlistBtn = game_item.querySelector(".wishlist");
       const favouritesBtn = game_item.querySelector(".favourites");
-      const userProfile = getWishlistAndFavourites();
 
       setupWishlistFavourites(
         game,
         wishlistBtn,
         favouritesBtn,
-        () => {
+        (btn) => {
           wishlistBtn.classList.replace("btn-success", "btn-danger");
-          wishlistBtn.setAttribute("data-bs-title", "Remove from wishlist");
+          wishlistBtn.setAttribute(
+            "data-bs-original-title",
+            "Remove from wishlist",
+          );
+          bootstrap.Tooltip.getInstance(wishlistBtn)?.setContent({
+            ".tooltip-inner": "Remove from wishlist",
+          });
+          if (btn) btn.blur();
         },
-        () => {
+        (btn) => {
           wishlistBtn.classList.replace("btn-danger", "btn-success");
-          wishlistBtn.setAttribute("data-bs-title", "Add to wishlist");
+          wishlistBtn.setAttribute("data-bs-original-title", "Add to wishlist");
+          bootstrap.Tooltip.getInstance(wishlistBtn)?.setContent({
+            ".tooltip-inner": "Add to wishlist",
+          });
+          if (btn) btn.blur();
         },
-        () => {
+        (btn) => {
           favouritesBtn.classList.replace("btn-success", "btn-danger");
-          favouritesBtn.setAttribute("data-bs-title", "Remove from favourites");
+          favouritesBtn.setAttribute(
+            "data-bs-original-title",
+            "Remove from favourites",
+          );
+          bootstrap.Tooltip.getInstance(favouritesBtn)?.setContent({
+            ".tooltip-inner": "Remove from favourites",
+          });
+          if (btn) btn.blur();
         },
-        () => {
+        (btn) => {
           favouritesBtn.classList.replace("btn-danger", "btn-success");
-          favouritesBtn.setAttribute("data-bs-title", "Add to favourites");
+          favouritesBtn.setAttribute(
+            "data-bs-original-title",
+            "Add to favourites",
+          );
+          bootstrap.Tooltip.getInstance(favouritesBtn)?.setContent({
+            ".tooltip-inner": "Add to favourites",
+          });
+          if (btn) btn.blur();
         },
       );
     }
 
     parent_el.appendChild(game_item);
-    const tooltipTriggerList = parent_el.querySelectorAll(
-      '[data-bs-toggle="tooltip"]',
-    );
-    const tooltipList = [...tooltipTriggerList].map(
-      (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl),
-    );
   });
+
+  parent_el.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => {
+    bootstrap.Tooltip.getInstance(el)?.dispose();
+  });
+  parent_el
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach((tooltipTriggerEl) => {
+      new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 
   Array.from(parent_el.querySelectorAll("img")).forEach((img) => {
     img.addEventListener("error", () => {
@@ -368,36 +413,32 @@ export function appendGames(results, parent_el, onRemove = null) {
   });
 }
 
+/**
+ * @param {string} name
+ */
 export function checkLoginStatus(name) {
   const userLink = document.getElementById("user-link");
   if (!userLink) return;
-  userLink.innerHTML = `<div class="dropdown">
-    <button
-      class="btn btn-secondary dropdown-toggle"
-      type="button"
-      data-bs-toggle="dropdown"
-      aria-expanded="false"
-    >
-      <i class="fa-solid fa-user me-1"></i>User
+  userLink.innerHTML = `
+  <div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="fa-solid fa-user me-1"></i>
     </button>
     <ul class="dropdown-menu dropdown-menu-end" style="width:fit-content;min-width:8rem">
-      <li style="width:fit-content">
+      <li style="width:fit-content" class="mx-auto">
         <button class="btn btn-outline-danger btn-sm logoutBtn" style="width:fit-content">
           <i class="fa-solid fa-right-from-bracket me-1"></i>Log out
         </button>
       </li>
-      <li style="width:fit-content">
-        <a class="dropdown-item" href="./user.html" style="width:fit-content"
-          ><i class="fa-solid fa-user me-1"></i
-        >${name}</a>
+      <li style="width:fit-content" class="mx-auto">
+        <a class="dropdown-item" href="./user.html" style="width:fit-content"><i class="fa-solid fa-user me-1"></i>${name}</a>
       </li>
     </ul>
   </div>`;
 
   userLink.querySelector(".logoutBtn").addEventListener("click", () => {
     sessionStorage.removeItem("user");
-    let registrationData = getRegistrationData();
-    registrationData.forEach(([key, value]) => {
+    getRegistrationData().forEach(([key, value]) => {
       value.keepSignIn = false;
       localStorage.setItem(key, JSON.stringify(value));
     });
@@ -405,58 +446,14 @@ export function checkLoginStatus(name) {
   });
 }
 
-export function getRegistrationData() {
-  return Object.entries(localStorage)
-    .filter(([key]) => key.startsWith("registrationData_"))
-    .map(([key, value]) => [key, JSON.parse(value)]);
-}
 /**
- *
- * @param {String} type
- * @param {String} message
- */
-export function showToast(type, message) {
-  const toast = document.getElementById(
-    `toast${type.charAt(0).toUpperCase() + type.slice(1)}`,
-  );
-  const toastBody = document.getElementById(
-    `toast${type.charAt(0).toUpperCase() + type.slice(1)}Body`,
-  );
-  if (!toast || !toastBody) return;
-  toastBody.textContent = message;
-  document.querySelectorAll(".toast").forEach((t) => (t.style.zIndex = 1055));
-  toast.style.zIndex = 1056;
-  new bootstrap.Toast(toast).show();
-}
-
-export function getCurrentUser() {
-  const session = JSON.parse(sessionStorage.getItem("user"));
-  if (session) {
-    return [
-      session.originalKey,
-      JSON.parse(localStorage.getItem(session.originalKey)),
-    ];
-  }
-  return getRegistrationData().find(([key, value]) => value.keepSignIn);
-}
-
-export function getWishlistAndFavourites() {
-  const currentUser = getCurrentUser();
-  if (!currentUser[1].wishlist) currentUser[1].wishlist = [];
-  if (!currentUser[1].favourites) currentUser[1].favourites = [];
-  const wishlist = currentUser[1].wishlist;
-  const favourites = currentUser[1].favourites;
-  return [currentUser, wishlist, favourites];
-}
-
-/**
- * @param {{id:Number,name:String,background_image:String}} gameInfo
+ * @param {GameItem} gameInfo
  * @param {HTMLButtonElement} wishlistBtn
  * @param {HTMLButtonElement} favouriteBtn
- * @param {()=>void} wishlistTrue
- * @param {()=>void} wishlistFalse
- * @param {()=>void} favouritesTrue
- * @param {()=>void} favouritesFalse
+ * @param {(btn?:HTMLButtonElement)=>void} wishlistTrue
+ * @param {(btn?:HTMLButtonElement)=>void} wishlistFalse
+ * @param {(btn?:HTMLButtonElement)=>void} favouritesTrue
+ * @param {(btn?:HTMLButtonElement)=>void} favouritesFalse
  */
 export function setupWishlistFavourites(
   gameInfo,
@@ -472,52 +469,79 @@ export function setupWishlistFavourites(
     name: gameInfo.name,
     background_image: gameInfo.background_image,
   };
-  const userProfile = getWishlistAndFavourites();
-  if (!userProfile[0]) window.location.href = "./signin.html";
 
-  if (userProfile[1].find((g) => g.id === gameInfo.id)) wishlistTrue();
-  if (userProfile[2].find((g) => g.id === gameInfo.id)) favouritesTrue();
+  const userProfile = getWishlistAndFavourites();
+  if (!userProfile[0]) return;
+
+  if (userProfile[1].some((g) => g.id === gameInfo.id)) wishlistTrue();
+  if (userProfile[2].some((g) => g.id === gameInfo.id)) favouritesTrue();
 
   wishlistBtn.addEventListener("click", (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    const userProfile = getWishlistAndFavourites();
-    const idx = userProfile[1].findIndex((g) => g.id === gameInfo.id);
+    const currentProfile = getWishlistAndFavourites();
+    const idx = currentProfile[1].findIndex((g) => g.id === gameInfo.id);
     if (idx === -1) {
-      userProfile[1].push(gameData);
-      wishlistTrue();
+      currentProfile[1].push(gameData);
+      wishlistTrue(wishlistBtn);
       showToast("success", `${gameInfo.name} added to wishlist!`);
     } else {
-      userProfile[1].splice(idx, 1);
-      wishlistFalse();
+      currentProfile[1].splice(idx, 1);
+      wishlistFalse(wishlistBtn);
       showToast("danger", `${gameInfo.name} removed from wishlist!`);
     }
-    localStorage.setItem(userProfile[0][0], JSON.stringify(userProfile[0][1]));
+    localStorage.setItem(
+      currentProfile[0][0],
+      JSON.stringify(currentProfile[0][1]),
+    );
     updateCollectionCount();
   });
 
   favouriteBtn.addEventListener("click", (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    const userProfile = getWishlistAndFavourites();
-    const idx = userProfile[2].findIndex((g) => g.id === gameInfo.id);
+    const currentProfile = getWishlistAndFavourites();
+    const idx = currentProfile[2].findIndex((g) => g.id === gameInfo.id);
     if (idx === -1) {
-      userProfile[2].push(gameData);
-      favouritesTrue();
+      currentProfile[2].push(gameData);
+      favouritesTrue(favouriteBtn);
       showToast("success", `${gameInfo.name} added to favourites!`);
     } else {
-      userProfile[2].splice(idx, 1);
-      favouritesFalse();
+      currentProfile[2].splice(idx, 1);
+      favouritesFalse(favouriteBtn);
       showToast("danger", `${gameInfo.name} removed from favourites!`);
     }
-    localStorage.setItem(userProfile[0][0], JSON.stringify(userProfile[0][1]));
+    localStorage.setItem(
+      currentProfile[0][0],
+      JSON.stringify(currentProfile[0][1]),
+    );
     updateCollectionCount();
   });
 
-  window.addEventListener("storage", (e) => {
-    const userProfile = getWishlistAndFavourites();
-    if (userProfile[1].find((g) => g.id === gameInfo.id)) wishlistTrue();
-    else wishlistFalse();
-    if (userProfile[2].find((g) => g.id === gameInfo.id)) favouritesTrue();
-    else favouritesFalse();
+  window.addEventListener("storage", () => {
+    const currentProfile = getWishlistAndFavourites();
+    if (currentProfile[1].find((g) => g.id === gameInfo.id))
+      wishlistTrue(wishlistBtn);
+    else wishlistFalse(wishlistBtn);
+    if (currentProfile[2].find((g) => g.id === gameInfo.id))
+      favouritesTrue(favouriteBtn);
+    else favouritesFalse(favouriteBtn);
     updateCollectionCount();
   });
+}
+
+/**
+ * @param {string} type
+ * @param {string} message
+ */
+export function showToast(type, message) {
+  const targetId = `toast${type.charAt(0).toUpperCase() + type.slice(1)}`;
+  const toast = document.getElementById(targetId);
+  const toastBody = document.getElementById(`${targetId}Body`);
+  if (!toast || !toastBody) return;
+
+  toastBody.textContent = message;
+  document.querySelectorAll(".toast").forEach((t) => (t.style.zIndex = 1055));
+  toast.style.zIndex = 1061;
+  new bootstrap.Toast(toast).show();
 }

@@ -1,4 +1,4 @@
-import { createNavbar, appendGames } from "./utils.js";
+import { createNavbar, appendGames, MY_API_KEY } from "./utils.js";
 
 const params = Object.fromEntries(new URLSearchParams(window.location.search));
 const name = params.name;
@@ -7,7 +7,6 @@ if (!paramKey) {
   window.location.href = "./index.html";
 }
 const paramValue = params[paramKey];
-const MY_API_KEY = "1c6fb51e9d0c417ba4f34ffe358648f2";
 
 let currentPage = 1;
 let currentOrdering = "-added";

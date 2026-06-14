@@ -7,7 +7,7 @@ const MY_API_KEY = "1c6fb51e9d0c417ba4f34ffe358648f2";
 if (!search_query?.trim()) window.location.href = "./index.html";
 
 let currentPage = 1;
-let currentOrdering = "";
+let currentOrdering = "-added";
 
 async function fetchGames(page, ordering) {
   const orderParam = ordering ? `&ordering=${ordering}` : "";
@@ -30,7 +30,6 @@ async function loadGames(reset = false) {
 
   const data = await fetchGames(currentPage, currentOrdering);
   resultsCount.textContent = `${data.count.toLocaleString()} results found`;
-
   if (reset) grid.innerHTML = "";
   appendGames(data.results, grid);
 

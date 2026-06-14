@@ -1,3 +1,4 @@
+import { createNavbar, appendGames, MY_API_KEY } from "./utils.js";
 var orderings = ["-added", "-metacritic", "-rating", "-released", "-updated"];
 var replacements = {
   "-added": "Most Popular",
@@ -6,13 +7,10 @@ var replacements = {
   "-released": "Newest Releases",
   "-updated": "Newest Updated",
 };
-var MY_API_KEY = "1c6fb51e9d0c417ba4f34ffe358648f2";
-
-import { createNavbar, appendGames } from "./utils.js";
 
 function getGame(ordering) {
   return fetch(
-    `https://api.rawg.io/api/games?key=${MY_API_KEY}&ordering=${ordering}&page_size=${ordering === "-rating" ? 40 : 20}&metacritic=60,100&exclude_additions=true&discover=true`,
+    `https://api.rawg.io/api/games?key=${MY_API_KEY}&ordering=${ordering}&page_size=${ordering === "-rating" ? 40 : 20}&metacritic=60,100&exclude_additions=true`,
   )
     .then((response) => response.json())
     .then((data) => {
@@ -68,7 +66,7 @@ async function loadGames() {
         )
         .slice(0, 20);
     console.log(results[i].results);
-    appendGames(results[i].results, games_list);
+    appendGames(results[i].results, games_list, null, true);
   });
 
   new bootstrap.ScrollSpy(document.body, {

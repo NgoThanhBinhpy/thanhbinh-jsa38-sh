@@ -23,7 +23,11 @@ document.getElementById("userForm").addEventListener("submit", (e) => {
   const oldPassword = document.getElementById("inputOldPassword").value;
   const newPassword = document.getElementById("inputNewPassword").value;
 
-  if (oldPassword || newPassword) {
+  user.email = document.getElementById("inputEmail").value;
+  user.gender = document.getElementById("inputGender").value;
+  user.dob = document.getElementById("inputDOB").value;
+
+  if (oldPassword && newPassword) {
     if (oldPassword !== user.password) {
       showToast("danger", "Old password is incorrect!");
       return;
@@ -45,19 +49,19 @@ document.getElementById("userForm").addEventListener("submit", (e) => {
     user.password = newPassword;
   }
 
-  user.email = document.getElementById("inputEmail").value;
-  user.gender = document.getElementById("inputGender").value;
-  user.phone = document.getElementById("inputPhone").value;
-  user.dob = document.getElementById("inputDOB").value;
-  user.address = document.getElementById("inputAddress").value;
-  user.state = document.getElementById("inputState").value;
-
   localStorage.setItem(currentUser[0], JSON.stringify(user));
   sessionStorage.setItem(
     "user",
-    JSON.stringify({ name: user.name, email: user.email, role: "user" }),
+    JSON.stringify({
+      name: user.name,
+      email: user.email,
+      role: "user",
+      originalKey: currentUser[0],
+    }),
   );
-  showToast("success", "Password changed successfully!");
+  if (oldPassword && newPassword)
+    showToast("success", "Password changed successfully!");
+  else showToast("success", "User information changed successfully!");
 
   document.getElementById("inputOldPassword").value = "";
   document.getElementById("inputNewPassword").value = "";
