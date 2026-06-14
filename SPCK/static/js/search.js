@@ -4,7 +4,7 @@ const params = new URLSearchParams(window.location.search);
 const search_query = params.get("search_query");
 const MY_API_KEY = "1c6fb51e9d0c417ba4f34ffe358648f2";
 
-if (!search_query?.trim()) window.location.href = "./index.html";
+if (!search_query?.trim()) window.location.href = "../index.html";
 
 let currentPage = 1;
 let currentOrdering = "-added";

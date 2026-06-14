@@ -60,7 +60,7 @@ export function createNavbar() {
     window.location.href = "./signin.html";
     return;
   }
-
+  const isIndex = window.location.href.includes("index.html");
   let Navbar = document.createElement("div");
   Navbar.classList.add("position-sticky", "top-0");
   Navbar.style.zIndex = "1060";
@@ -74,8 +74,8 @@ export function createNavbar() {
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto gap-1 mt-2 mt-lg-0">
-            <li class="nav-item"><a class="nav-link rounded px-3" href="./index.html"><i class="fa-solid fa-house me-1"></i> Home</a></li>
-            <li class="nav-item"><a class="nav-link rounded px-3" href="./collection.html"><i class="fa-solid fa-layer-group me-1"></i> Collection</a></li>
+            <li class="nav-item"><a class="nav-link rounded px-3" href="${isIndex ? "#" : "../index.html"}"><i class="fa-solid fa-house me-1"></i> Home</a></li>
+            <li class="nav-item"><a class="nav-link rounded px-3" href="${isIndex ? "./pages/collection.html" : "./collection.html"}"><i class="fa-solid fa-layer-group me-1"></i> Collection</a></li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                 <i class="fa-solid fa-compass me-1"></i> Explore
@@ -108,7 +108,7 @@ export function createNavbar() {
               </form>
             </li>
             <li class="nav-item" id="user-link">
-              <a class="nav-link rounded px-3" href="./signin.html"><i class="fa-solid fa-right-to-bracket me-1"></i> Đăng nhập</a>
+              <a class="nav-link rounded px-3" href="${isIndex ? "./pages/signin.html" : "./sign.html"}"><i class="fa-solid fa-right-to-bracket me-1"></i> Sign in</a>
             </li>
           </ul>
         </div>
@@ -121,6 +121,8 @@ export function createNavbar() {
 
   const handleSearch = () => {
     if (search_bar.value.trim()) {
+      if (isIndex)
+        window.location.href = `./pages/search.html?search_query=${encodeURIComponent(search_bar.value.trim())}`;
       window.location.href = `./search.html?search_query=${encodeURIComponent(search_bar.value.trim())}`;
     }
   };
@@ -257,6 +259,7 @@ export function createNavbar() {
 
 function createNavBarSection(section, sectionArr, Name, IdOrSlug) {
   if (!section) return;
+  const isIndex = window.location.href.includes("index.html");
   sectionArr.forEach((sectionObj) => {
     const section_item = document.createElement("div");
     section_item.classList.add("col");
@@ -264,7 +267,7 @@ function createNavBarSection(section, sectionArr, Name, IdOrSlug) {
       IdOrSlug === "id"
         ? sectionObj.id
         : sectionObj.slug || sectionObj.name.toLowerCase().replaceAll(" ", "-");
-    section_item.innerHTML = `<a class="dropdown-item text-wrap ps-2 pe-0" href="./explore.html?${Name}=${paramVal}&name=${encodeURIComponent(sectionObj.name)}"><i class="${sectionObj.icon} fa-xs me-1"></i> ${sectionObj.name}</a>`;
+    section_item.innerHTML = `<a class="dropdown-item text-wrap ps-2 pe-0" href="${isIndex ? "./pages/explore.html" : "./explore.html"}?${Name}=${paramVal}&name=${encodeURIComponent(sectionObj.name)}"><i class="${sectionObj.icon} fa-xs me-1"></i> ${sectionObj.name}</a>`;
     section.appendChild(section_item);
   });
 }
@@ -277,7 +280,9 @@ export function updateCollectionCount() {
   const favouritesCount = (data[2] || []).length;
   const total = wishlistCount + favouritesCount;
 
-  const collectionLink = document.querySelector("a[href='./collection.html']");
+  const collectionLink = document.querySelector(
+    "a[href='./collection.html'] a[href='./pages/collection.html']",
+  );
   if (!collectionLink) return;
 
   collectionLink.setAttribute("data-bs-toggle", "tooltip");
@@ -310,13 +315,17 @@ export function appendGames(
   imageRequired = false,
 ) {
   parent_el.innerHTML = "";
-
+  const isIndex = window.location.href.includes("index.html");
   if (imageRequired) results = results.filter((game) => game.background_image);
 
   results.forEach((game) => {
     const game_item = document.createElement("div");
     game_item.onclick = () => {
-      window.open(`./info.html?id=${game.id}`, "_blank", "noopener,noreferrer");
+      window.open(
+        `${isIndex ? "./pages/info.html" : "./info.html"}?id=${game.id}`,
+        "_blank",
+        "noopener,noreferrer",
+      );
     };
     game_item.classList.add("game-card", "position-relative");
     game_item.innerHTML = `
@@ -419,6 +428,7 @@ export function appendGames(
 export function checkLoginStatus(name) {
   const userLink = document.getElementById("user-link");
   if (!userLink) return;
+  const isIndex = window.location.href.includes("index.html");
   userLink.innerHTML = `
   <div class="dropdown">
     <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -431,7 +441,7 @@ export function checkLoginStatus(name) {
         </button>
       </li>
       <li style="width:fit-content" class="mx-auto">
-        <a class="dropdown-item" href="./user.html" style="width:fit-content"><i class="fa-solid fa-user me-1"></i>${name}</a>
+        <a class="dropdown-item" href="${isIndex ? "./pages/signin.html" : "./signin.html"}" style="width:fit-content"><i class="fa-solid fa-user me-1"></i>${name}</a>
       </li>
     </ul>
   </div>`;
@@ -442,7 +452,7 @@ export function checkLoginStatus(name) {
       value.keepSignIn = false;
       localStorage.setItem(key, JSON.stringify(value));
     });
-    window.location.href = "./signin.html";
+    window.location.href = isIndex ? "./pages/signin.html" : "./signin.html";
   });
 }
 

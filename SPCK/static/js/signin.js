@@ -52,7 +52,7 @@ signinForm.addEventListener("submit", function (event) {
         originalKey: "registrationData_0",
       }),
     );
-    window.location.href = "./index.html";
+    window.location.href = "../index.html";
     checkLoginStatus(admin_account.name);
     return;
   }
@@ -75,7 +75,7 @@ signinForm.addEventListener("submit", function (event) {
         localStorage.setItem(user[0], JSON.stringify(user[1]));
       }
     }
-    window.location.href = "./index.html";
+    window.location.href = "../index.html";
     checkLoginStatus(user.name);
   } else {
     showToast("danger", "Invalid username or password!");
