@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đăng ký</title>
+    <title>Register</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -21,9 +21,6 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <link rel="stylesheet" href="../static/css/model.css" />
-  </head>
-  <body>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
@@ -35,6 +32,9 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
+    <link rel="stylesheet" href="../static/css/index.css" />
+  </head>
+  <body>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/js/all.js"
       integrity="sha512-aK6kibiwf8qo6euZqFOsx3sZ0WmEYs3f/wtvp44qy8CdGcTah45mgbOsLi5RMvylljL0TTMu6Shr6X+g1w1lIA=="
@@ -51,7 +51,7 @@
       aria-atomic="true"
     >
       <div class="d-flex">
-        <div class="toast-body" id="toastSuccessBody">Thành công!</div>
+        <div class="toast-body" id="toastSuccessBody"></div>
         <button
           type="button"
           class="btn-close btn-close-white me-2 m-auto"
@@ -70,7 +70,7 @@
       aria-atomic="true"
     >
       <div class="d-flex">
-        <div class="toast-body" id="toastDangerBody">Có lỗi xảy ra!</div>
+        <div class="toast-body" id="toastDangerBody"></div>
         <button
           type="button"
           class="btn-close btn-close-white me-2 m-auto"
@@ -82,9 +82,13 @@
 
     <!--Register-form-content starts-->
     <div class="m-4">
-      <form class="row g-3 needs-validation" id="formRegister" novalidate="">
+      <form
+        class="row g-3 needs-validation d-grid"
+        id="formRegister"
+        novalidate=""
+      >
         <!--Username-input starts-->
-        <div class="col-md-6">
+        <div class="col-md-4 mx-auto">
           <div class="input-group">
             <span class="input-group-text bg-white">
               <i class="fa-solid fa-user text-secondary"></i>
@@ -95,19 +99,19 @@
                 type="text"
                 class="form-control"
                 id="inputName"
-                placeholder="Tên đăng nhập"
+                placeholder="Username"
                 required=""
               />
-              <label for="inputName">Tên đăng nhập</label>
+              <label for="inputName">Username</label>
             </div>
           </div>
 
-          <div class="invalid-feedback">Vui lòng nhập tên đăng nhập.</div>
+          <div class="invalid-feedback">Please enter Username.</div>
         </div>
         <!--Username-input ends-->
 
         <!--Email-input starts-->
-        <div class="col-md-6">
+        <div class="col-md-4 mx-auto">
           <div class="input-group">
             <span class="input-group-text bg-white">
               <i class="fa-solid fa-envelope text-secondary"></i>
@@ -128,7 +132,7 @@
         <!--Email-input ends-->
 
         <!--Password-input starts-->
-        <div class="col-md-6">
+        <div class="col-md-4 mx-auto">
           <div class="input-group">
             <span class="input-group-text bg-white">
               <i class="fa-solid fa-lock text-secondary"></i>
@@ -139,58 +143,38 @@
                 type="password"
                 class="form-control"
                 id="inputPassword"
-                placeholder="Mật khẩu"
+                placeholder="Password"
                 required=""
+                new-password=""
               />
-              <label for="inputPassword">Mật khẩu</label>
+              <label for="inputPassword">Password</label>
             </div>
           </div>
         </div>
         <!--Password-input ends-->
 
         <!--Gender-input starts-->
-        <div class="col-md-6">
+        <div class="col-md-4 mx-auto">
           <div class="input-group">
             <span class="input-group-text bg-white">
               <i class="fa-solid fa-venus-mars text-secondary"></i>
             </span>
             <div class="form-floating flex-grow-1">
               <select class="form-select" id="inputGender" required="">
-                <option value="" disabled selected>Chọn giới tính...</option>
-                <option>Nam</option>
-                <option>Nữ</option>
-                <option>Khác...</option>
+                <option value="" disabled selected>Choose gender...</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other...</option>
               </select>
-              <label for="inputGender">Giới tính</label>
+              <label for="inputGender">Gender</label>
             </div>
           </div>
-          <div class="invalid-feedback">Vui lòng chọn giới tính.</div>
+          <div class="invalid-feedback">Vui lòng choose giới tính.</div>
         </div>
         <!--Gender-input ends-->
 
-        <!--PhoneNum-input starts-->
-        <div class="col-md-6">
-          <div class="input-group">
-            <span class="input-group-text bg-white">
-              <i class="fa-solid fa-phone text-secondary"></i>
-            </span>
-            <div class="form-floating flex-grow-1">
-              <input
-                type="text"
-                class="form-control"
-                id="inputPhone"
-                placeholder="0123456789"
-                required=""
-              />
-              <label for="inputPhone">Số điện thoại</label>
-            </div>
-          </div>
-          <div class="invalid-feedback">Vui lòng nhập số điện thoại.</div>
-        </div>
-        <!--PhoneNum-input ends-->
-
         <!--DOB-input starts-->
-        <div class="col-md-6">
+        <div class="col-md-4 mx-auto">
           <div class="input-group">
             <span class="input-group-text bg-white">
               <i class="fa-solid fa-calendar-days text-secondary"></i>
@@ -203,144 +187,29 @@
                 placeholder="dd/mm/yyyy"
                 required=""
               />
-              <label for="inputDOB">Ngày sinh</label>
+              <label for="inputDOB">Date Of birth</label>
             </div>
           </div>
-          <div class="invalid-feedback">Vui lòng nhập ngày sinh.</div>
+          <div class="invalid-feedback">Please enter date of birth.</div>
         </div>
         <!--DOB-input ends-->
 
-        <!--Address-input starts-->
-        <div class="col-md-6">
-          <div class="input-group">
-            <span class="input-group-text bg-white">
-              <i class="fa-solid fa-location-dot text-secondary"></i>
-            </span>
-            <div class="form-floating flex-grow-1">
-              <input
-                type="text"
-                class="form-control"
-                id="inputAddress"
-                placeholder="Địa chỉ"
-                required=""
-              />
-              <label for="inputAddress">Địa chỉ</label>
-            </div>
-          </div>
-          <div class="invalid-feedback">Vui lòng nhập địa chỉ.</div>
-        </div>
-        <!--Address-input ends-->
-
-        <!--State-input starts-->
-        <div class="col-md-6">
-          <div class="input-group">
-            <span class="input-group-text bg-white">
-              <i class="fa-solid fa-map text-secondary"></i>
-            </span>
-            <div class="form-floating flex-grow-1">
-              <select class="form-select" id="inputState" required="">
-                <option value="" disabled selected>Chọn Tỉnh/Thành...</option>
-                <option>An Giang</option>
-                <option>Bà Rịa - Vũng Tàu</option>
-                <option>Bạc Liêu</option>
-                <option>Bắc Giang</option>
-                <option>Bắc Kạn</option>
-                <option>Bắc Ninh</option>
-                <option>Bến Tre</option>
-                <option>Bình Dương</option>
-                <option>Bình Định</option>
-                <option>Bình Phước</option>
-                <option>Bình Thuận</option>
-                <option>Cà Mau</option>
-                <option>Cần Thơ</option>
-                <option>Cao Bằng</option>
-                <option>Đà Nẵng</option>
-                <option>Đắk Lắk</option>
-                <option>Đắk Nông</option>
-                <option>Điện Biên</option>
-                <option>Đồng Nai</option>
-                <option>Đồng Tháp</option>
-                <option>Gia Lai</option>
-                <option>Hà Giang</option>
-                <option>Hà Nam</option>
-                <option>Hà Nội</option>
-                <option>Hà Tĩnh</option>
-                <option>Hải Dương</option>
-                <option>Hải Phòng</option>
-                <option>Hậu Giang</option>
-                <option>Hòa Bình</option>
-                <option>Hưng Yên</option>
-                <option>Khánh Hòa</option>
-                <option>Kiên Giang</option>
-                <option>Kon Tum</option>
-                <option>Lai Châu</option>
-                <option>Lâm Đồng</option>
-                <option>Lạng Sơn</option>
-                <option>Lào Cai</option>
-                <option>Long An</option>
-                <option>Nam Định</option>
-                <option>Nghệ An</option>
-                <option>Ninh Bình</option>
-                <option>Ninh Thuận</option>
-                <option>Phú Thọ</option>
-                <option>Phú Yên</option>
-                <option>Quảng Bình</option>
-                <option>Quảng Nam</option>
-                <option>Quảng Ngãi</option>
-                <option>Quảng Ninh</option>
-                <option>Quảng Trị</option>
-                <option>Sóc Trăng</option>
-                <option>Sơn La</option>
-                <option>Tây Ninh</option>
-                <option>Thái Bình</option>
-                <option>Thái Nguyên</option>
-                <option>Thanh Hóa</option>
-                <option>Thừa Thiên Huế</option>
-                <option>Tiền Giang</option>
-                <option>TP Hồ Chí Minh</option>
-                <option>Trà Vinh</option>
-                <option>Tuyên Quang</option>
-                <option>Vĩnh Long</option>
-                <option>Vĩnh Phúc</option>
-                <option>Yên Bái</option>
-              </select>
-              <label for="inputState">Tỉnh/Thành</label>
-            </div>
-          </div>
-          <div class="invalid-feedback">Vui lòng chọn Tỉnh/Thành.</div>
-        </div>
-        <!--State-input ends-->
-
-        <!--Grid-check-input starts-->
-        <div class="col-12">
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="gridCheck"
-              required=""
-            />
-            <label class="form-check-label" for="gridCheck">
-              Tôi đồng ý với điều khoản sử dụng
-            </label>
-          </div>
-        </div>
-        <!--Grid-check-input ends-->
-
         <!--Submit-button starts-->
         <div class="d-grid gap-2 col-6 mx-auto">
-          <button type="submit" class="btn btn-outline-primary">Đăng ký</button>
+          <button type="submit" class="btn btn-outline-primary">
+            Register
+          </button>
         </div>
         <!--Submit-button ends-->
-
-        <!--Signin-link starts-->
-        <div class="text-center">
-          <a href="./signin.html" class="text-decoration-none">
-            Đã có tài khoản? Đăng nhập ngay
-          </a>
-        </div>
-        <!--Signin-link ends-->
       </form>
+
+      <!--Signin-link starts-->
+      <div class="text-center">
+        <a href="./signin.html" class="text-decoration-none">
+          Already have an account? Sign in!
+        </a>
+      </div>
+      <!--Signin-link ends-->
     </div>
     <!--Register-form-content ends-->
 

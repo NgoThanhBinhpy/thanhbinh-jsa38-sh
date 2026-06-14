@@ -2,7 +2,6 @@ import { showToast, getRegistrationData, checkLoginStatus } from "./utils.js";
 const signinForm = document.getElementById("formSignin");
 const inputName = document.getElementById("inputName");
 const inputPassword = document.getElementById("inputPassword");
-const inputPasswordConfirm = document.getElementById("inputPasswordConfirm");
 const gridcheck = document.getElementById("gridCheck");
 const admin_account = {
   name: "admin",
@@ -13,20 +12,6 @@ const admin_account = {
   address: "123 Admin St",
   state: "State",
   keepSignIn: false,
-};
-
-/**
- * @param {Array} arr
- * @param {Object} obj
- * @returns {string|null}
- */
-const findKeyByValue = (arr, obj) => {
-  for (let i = 0; i < arr.length; i++) {
-    if (JSON.stringify(arr[i]) === JSON.stringify(obj)) {
-      return `registrationData_${i}`; // Assuming keys are in the format "registrationData_<index>"
-    }
-  }
-  return null;
 };
 
 function clearKeepSignIn() {
@@ -44,13 +29,8 @@ signinForm.addEventListener("submit", function (event) {
   event.preventDefault();
   signinForm.classList.add("was-validated");
 
-  if (!inputName.value || !inputPassword.value || !inputPasswordConfirm.value) {
-    showToast("danger", "Vui lòng điền tất cả thông tin!");
-    return;
-  }
-
-  if (inputPassword.value !== inputPasswordConfirm.value) {
-    showToast("danger", "Mật khẩu không khớp!");
+  if (!inputName.value || !inputPassword.value) {
+    showToast("danger", "Please fill in all the information!");
     return;
   }
 
@@ -59,59 +39,45 @@ signinForm.addEventListener("submit", function (event) {
 
   const registrationData = getRegistrationData();
   const user = registrationData.find(
-    (user) => user.name === name && user.password === password,
+    ([key, value]) => value.name === name && value.password === password,
   );
 
   if (name === admin_account.name && password === admin_account.password) {
-    showToast("success", "Đăng nhập với tài khoản admin!");
+    showToast("success", "Logged in with admin account!");
     sessionStorage.setItem(
       "user",
       JSON.stringify({
         name: admin_account.name,
         role: "admin",
+        originalKey: "registrationData_0",
       }),
     );
-    window.location.href = "../index.html";
+    window.location.href = "./index.html";
     checkLoginStatus(admin_account.name);
     return;
   }
 
   if (user) {
-    showToast("success", "Đăng nhập thành công!");
+    showToast("success", "Login successful!");
     clearKeepSignIn();
     sessionStorage.setItem(
       "user",
       JSON.stringify({
-        name: user.name,
-        email: user.email,
+        name: user[1].name,
+        email: user[1].email,
         role: "user",
+        originalKey: user[0],
       }),
     );
     if (gridcheck.checked) {
-      user.keepSignIn = true;
-      const key = findKeyByValue(registrationData, user);
-      if (key) {
-        localStorage.setItem(key, JSON.stringify(user));
-      } else {
-        console.error("Không tìm thấy key cho người dùng:", user);
+      user[1].keepSignIn = true;
+      if (user[0]) {
+        localStorage.setItem(user[0], JSON.stringify(user[1]));
       }
     }
-    window.location.href = "../index.html";
+    window.location.href = "./index.html";
     checkLoginStatus(user.name);
   } else {
-    showToast("danger", "Tên đăng nhập hoặc mật khẩu không đúng!");
+    showToast("danger", "Invalid username or password!");
   }
 });
-
-function test() {
-  inputName.value = "Ngô Thanh Bình";
-  inputPassword.value = "QWE123!@#";
-  inputPasswordConfirm.value = "QWE123!@#";
-}
-function adminTest() {
-  inputName.value = "admin";
-  inputPassword.value = "Admin@123";
-  inputPasswordConfirm.value = "Admin@123";
-}
-window.test = test;
-window.adminTest = adminTest;

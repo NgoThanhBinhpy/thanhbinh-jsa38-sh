@@ -1,16 +1,12 @@
 const registerForm = document.getElementById("formRegister");
+const nameInput = document.getElementById("inputName");
 const passwordInput = document.getElementById("inputPassword");
 const emailInput = document.getElementById("inputEmail");
 const genderInput = document.getElementById("inputGender");
-const nameInput = document.getElementById("inputName");
-const phoneInput = document.getElementById("inputPhone");
 const dobInput = document.getElementById("inputDOB");
-const addressInput = document.getElementById("inputAddress");
-const stateInput = document.getElementById("inputState");
-const gridCheckInput = document.getElementById("gridCheck");
 
 flatpickr("#inputDOB", {
-  dateFormat: "d/m/Y", // dd/mm/yyyy
+  dateFormat: "d/m/Y",
   allowInput: true,
 });
 
@@ -23,20 +19,11 @@ registerForm.addEventListener("submit", function (event) {
   if (
     !emailInput.value ||
     !nameInput.value ||
-    !addressInput.value ||
-    !phoneInput.value ||
     !dobInput.value ||
-    !stateInput.value ||
     !passwordInput.value ||
     !genderInput.value
   ) {
-    console.log("Vui lòng điền đầy đủ thông tin!");
-    showToast("danger", "Vui lòng điền đầy đủ thông tin!");
-    return;
-  }
-  if (!gridCheckInput.checked) {
-    console.log("Vui lòng đồng ý với các điều khoản!");
-    showToast("danger", "Vui lòng đồng ý với các điều khoản!");
+    showToast("danger", "Please fill in all the information!");
     return;
   }
   if (
@@ -49,21 +36,21 @@ registerForm.addEventListener("submit", function (event) {
   ) {
     showToast(
       "Danger",
-      "Mật khẩu phải dài ít nhất 8 ký tự và chứa chữ số, ký tự đặc biệt.",
+      "Passwords must be at least 8 characters long, including both numbers and special characters.",
     );
     return;
   }
 
-  console.log("inputValue:", {
-    password: passwordInput.value,
-    email: emailInput.value,
-    name: nameInput.value,
-    gender: genderInput.value,
-    phone: phoneInput.value,
-    dob: dobInput.value,
-    address: addressInput.value,
-    state: stateInput.value,
-  });
+  localStorage.setItem(
+    "registrationData_0",
+    JSON.stringify({
+      name: "admin",
+      email: "admin@example.com",
+      dob: "01/01/1990",
+      gender: "Male",
+      password: "Admin@123",
+    }),
+  );
 
   var currentId = 0;
   currentId = localStorage.length || 0;
@@ -74,8 +61,7 @@ registerForm.addEventListener("submit", function (event) {
       (curr) => curr.name === nameInput.value,
     );
     if (existingUser) {
-      console.log("Tài khoản đã tồn tại.");
-      showToast("danger", "Tài khoản đã tồn tại");
+      showToast("danger", "Account already exists");
       return;
     }
   }
@@ -85,33 +71,13 @@ registerForm.addEventListener("submit", function (event) {
     email: emailInput.value,
     name: nameInput.value,
     gender: genderInput.value,
-    phone: phoneInput.value,
     dob: dobInput.value,
-    address: addressInput.value,
-    state: stateInput.value,
     keepSignIn: false,
   };
-  console.log("CurrentId:", currentId);
   currentId += 1;
-  console.log("Dữ liệu đăng ký:", registrationData);
   localStorage.setItem(
     "registrationData_" + registrationData.id,
     JSON.stringify(registrationData),
   );
-  console.log("Đăng ký thành công!");
-  showToast("success", "Đăng ký thành công!");
-  registerForm.classList.remove("was-validated");
-  registerForm.reset();
+  showToast("success", "Registration successful!");
 });
-
-function test() {
-  passwordInput.value = "QWE123!@#";
-  emailInput.value = "thanhbinh.progame@gmail.com";
-  nameInput.value = "Ngô Thanh Bình";
-  genderInput.value = "Nam";
-  phoneInput.value = "0909123456";
-  dobInput.value = "01/01/2004";
-  addressInput.value = "123 Đường ABC, Phường XYZ, Quận 1, TP.HCM";
-  stateInput.value = "TP Hồ Chí Minh";
-  gridCheckInput.checked = true;
-}

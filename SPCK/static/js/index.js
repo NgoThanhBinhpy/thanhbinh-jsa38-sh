@@ -1,55 +1,79 @@
-import { getRegistrationData, checkLoginStatus } from "./utils.js";
+import { createNavbar, appendGames, MY_API_KEY } from "./utils.js";
+var orderings = ["-added", "-metacritic", "-rating", "-released", "-updated"];
+var replacements = {
+  "-added": "Most Popular",
+  "-metacritic": "Top Rated",
+  "-rating": "Highest Rated",
+  "-released": "Newest Releases",
+  "-updated": "Newest Updated",
+};
 
-const storedUsername = localStorage.getItem("Username");
-console.log("StoredUsername:", storedUsername);
-
-document.addEventListener("DOMContentLoaded", () => {
-  if (storedUsername) {
-    checkLoginStatus(storedUsername);
-  } else {
-    checkLoginStatus(null);
-  }
-});
-
-const textElement = document.getElementById("typing-animation");
-const phrases = [
-  "Học tập không giới hạn",
-  "Chinh phục mọi kỳ thi",
-  "Khám phá tri thức mới",
-  "Nâng tầm kỹ năng số",
-];
-
-let phraseIndex = 0;
-let charIndex = 0;
-let isDeleting = false;
-let typeSpeed = 120;
-
-function type() {
-  const currentPhrase = phrases[phraseIndex];
-
-  if (isDeleting) {
-    textElement.textContent = currentPhrase.substring(0, charIndex - 1);
-    charIndex--;
-    typeSpeed = 50; // Xóa nhanh hơn gõ
-  } else {
-    // Gõ chữ
-    textElement.textContent = currentPhrase.substring(0, charIndex + 1);
-    charIndex++;
-    typeSpeed = 120;
-  }
-
-  // Logic chuyển câu
-  if (!isDeleting && charIndex === currentPhrase.length) {
-    isDeleting = true;
-    typeSpeed = 2000; // Nghỉ 2s sau khi gõ xong câu
-  } else if (isDeleting && charIndex === 0) {
-    isDeleting = false;
-    phraseIndex = (phraseIndex + 1) % phrases.length;
-    typeSpeed = 500; // Nghỉ một chút trước khi gõ câu mới
-  }
-
-  setTimeout(type, typeSpeed);
+function getGame(ordering) {
+  return fetch(
+    `https://api.rawg.io/api/games?key=${MY_API_KEY}&ordering=${ordering}&page_size=${ordering === "-rating" ? 40 : 20}&metacritic=60,100&exclude_additions=true`,
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      return data;
+    });
 }
 
-// Bắt đầu hiệu ứng
-document.addEventListener("DOMContentLoaded", type);
+async function loadGames() {
+  const main = document.querySelector("[data-bs-spy='scroll']");
+  const scrollspyNav = document.getElementById("scrollspy-nav");
+
+  orderings.forEach((ordering) => {
+    const section = document.createElement("section");
+    section.id = `section_${ordering.replace("-", "")}`;
+
+    const title = document.createElement("h2");
+    title.textContent = replacements[ordering];
+
+    const game_list = document.createElement("div");
+    game_list.innerHTML = `<div class="spinner-border mx-auto" role="status"><span class="visually-hidden">Loading...</span></div>`;
+    game_list.classList.add(
+      "rounded",
+      "p-4",
+      "mb-4",
+      "d-flex",
+      "gap-4",
+      "scrollable",
+      "games-list",
+    );
+    game_list.id = `games_list_${ordering}`;
+
+    section.appendChild(title);
+    section.appendChild(game_list);
+    main.appendChild(section);
+
+    const li = document.createElement("li");
+    li.classList.add("nav-item");
+    li.innerHTML = `<a class="nav-link" href="#${section.id}">${replacements[ordering]}</a>`;
+    scrollspyNav.appendChild(li);
+  });
+
+  var results = await Promise.all(orderings.map(getGame));
+
+  orderings.forEach((ordering, i) => {
+    const games_list = document.getElementById(`games_list_${ordering}`);
+    games_list.innerHTML = "";
+    if (ordering === "-rating")
+      results[i].results = results[i].results
+        .filter(
+          (result, idx, arr) =>
+            result.ratings.reduce((acc, curr) => (acc += curr.count), 0) >= 100,
+        )
+        .slice(0, 20);
+    console.log(results[i].results);
+    appendGames(results[i].results, games_list, null, true);
+  });
+
+  new bootstrap.ScrollSpy(document.body, {
+    target: "#scrollspy-nav",
+    offset: 80,
+  });
+}
+
+createNavbar();
+await loadGames();

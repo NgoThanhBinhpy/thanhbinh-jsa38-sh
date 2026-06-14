@@ -94,9 +94,6 @@ a {
 .exceptional {
   background: linear-gradient(180deg, #b4ec51, #429321);
 }
-.exceptional:hover {
-  box-shadow: #fff;
-}
 .recommended {
   background: linear-gradient(180deg, #2196f3, #1976d2);
 }
